@@ -2,8 +2,8 @@ import Image from "next/image";
 
 export default function Home() {
   return (
-    <div>
-      <h1>This is the start of something great!</h1>
+    <div style={{textAlign: 'center', width: '100vw'}}>
+      <h1>Real start</h1>
     </div>
 
   );
