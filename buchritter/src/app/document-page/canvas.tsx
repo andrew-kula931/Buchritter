@@ -1,10 +1,8 @@
-import Link from "next/link";
+"use client";
+
 import { useState } from "react";
-import styles from './doc.module.css';
 
-import "../app/globals.css";
-
-const docStyle = {
+export const docStyle = {
   document: {
     width: "800px",
     minHeight: "1060px",
@@ -25,29 +23,13 @@ const docStyle = {
   },
 };
 
-export default function DocumentPage() {
-  return (
-    <div>
-      <div className="navBar">
-        <textarea
-          className={styles.textareaDefault}
-          style={docStyle.title}
-          defaultValue="Doc Name"
-        />
-        <Link href="/">Click here to go back</Link>
-      </div>
-      <Canvas />
-    </div>
-  );
-}
-
-function Canvas() {
+export function Canvas() {
   const [text, setText] = useState("");
 
   return(
     <div style={docStyle.document}>
       <textarea
-        className={styles.textareaDefault}
+        className="textareaDefault"
         value={text}
         onChange={(e) => setText(e.target.value)}
         rows={40}
