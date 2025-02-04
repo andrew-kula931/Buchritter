@@ -1,6 +1,7 @@
 import Link from "next/link";
 
-import { Canvas, ToolBar, ToolBarProvider, docStyle } from "./canvas";
+import { Canvas, ToolBar, docStyle } from "./canvas";
+import CanvasController from "./canvas_controller";
 
 export default function DocumentPage() {
 
@@ -21,10 +22,8 @@ export default function DocumentPage() {
         <Link href="/">Click here to go back</Link>
       </div>
 
-      <ToolBarProvider>
-        <ToolBar />
-        <Canvas />
-      </ToolBarProvider>
+      <CanvasController />
+
     </div>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useRef, useState, ReactNode } from "react";
+import React, { useRef, useState } from "react";
 
 export const docStyle = {
   document: {
@@ -16,38 +16,9 @@ export const docStyle = {
   },
 };
 
-//Local states specific to the canvas and toolbar
-interface ToolBarStates {
-  bold: boolean;
-  italic: boolean;
-}
-
-//Inits a undefined state
-const ToolBarContext = createContext<{ state: ToolBarStates; setState: React.Dispatch<React.SetStateAction<ToolBarStates>> } | undefined>(undefined);
-
-//Context Provider (Defines the previous state)
-export function ToolBarProvider({ children } : { children: ReactNode }) {
-  const [state, setState] = useState<ToolBarStates>({ bold: false, italic: false});
-
-  return (
-    <ToolBarContext.Provider value={{ state, setState }}>
-      {children}
-    </ToolBarContext.Provider>
-  );
-}
-
-//A getter for the state
-function ToolBarState() {
-  const context = useContext(ToolBarContext);
-  if (!context) throw new Error("ToolBarContext is not defined");
-  return context;
-}
-
-
-export function Canvas() {
+export function Canvas(state: any) {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const [text, setText] = useState("");
-  const { state, setState } = ToolBarState();
 
   const keyDown = (event: { key: string; preventDefault: () => void; }) => {
     if (event.key === "Tab") {
@@ -91,29 +62,13 @@ export function Canvas() {
   );
 }
 
-export function ToolBar() {
-  //Uses the page level state for the toolbar
-  const { state, setState } = ToolBarState();
-
-  const boldClick = () => {
-    setState((prevState) => ({
-      ...prevState,
-      bold: !prevState.bold,
-    }));
-  }
-
-  const italicClick = () => {
-    setState((prevState) => ({
-      ...prevState,
-      italic: !prevState.italic,
-    }));
-  }
-
+export function ToolBar({ updateState, state }: { updateState: (key: any, value: any) => void; state: any }) {
   return(
     <div className="bg-[rgb(50,50,50)] h-auto p-2 flex flex-row">
       <div className="pr-2">Toolbar: </div>
-      <div className="pr-2" onClick={boldClick}>Bold</div>
-      <div className="pr-2" onClick={italicClick}>Italic</div>
+      <div className="pr-2" onClick={() => updateState("bold", !state.bold)}>Bold</div>
+      <div className="pr-2" onClick={() => updateState("italic", !state.italic)}>Italic</div>
+      <div className="pr-2" onClick={() => updateState("underline", !state.underline)}>Underline</div>
       <div className="pr-2">Bullet Point</div>
       <div className="pr-2">Numbered List</div>
     </div>
