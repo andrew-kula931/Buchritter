@@ -1,6 +1,9 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useCallback, useMemo, useRef, useState } from "react";
+import { createEditor, Descendant, Editor, Transforms, Element as SlateElement, BaseEditor } from "slate";
+import { Slate, Editable, withReact, useSlate } from "slate-react";
+import { withHistory } from 'slate-history'
 
 export const docStyle = {
   document: {
@@ -15,6 +18,33 @@ export const docStyle = {
     lineHeight: "1.6",
   },
 };
+
+const HOTKEYS = {
+  'mod+b': 'bold',
+  'mod+i': 'italic'
+}
+
+const LIST_TYPES = ['numbered-list', 'bulleted-list'];
+const TEXT_ALIGN_TYPES = ['left', 'center', 'right', 'justify'];
+
+export function RichTextEditor() {
+  const editor = useMemo(() => withHistory(withReact(createEditor())), []);
+  const [value, setValue] = useState<Descendant[]>([
+    { type: 'paragraph', children: [{ text: "Start typing..." }] },
+  ]);
+
+
+  return (
+    <Slate editor={editor} initialValue={value} onChange={setValue}>
+      <Editable 
+        placeholder="Enter text..." 
+        spellCheck 
+        className="border p-2 min-h-[100px]" 
+        autoFocus
+        />
+    </Slate>
+  );
+}
 
 export function Canvas(state: any) {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
