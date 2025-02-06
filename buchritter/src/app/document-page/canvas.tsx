@@ -30,7 +30,7 @@ const TEXT_ALIGN_TYPES = ['left', 'center', 'right', 'justify'];
 export function RichTextEditor() {
   const editor = useMemo(() => withHistory(withReact(createEditor())), []);
   const [value, setValue] = useState<Descendant[]>([
-    { type: 'paragraph', children: [{ text: "Start typing..." }] },
+    { children: [{ text: "Start typing..." }] },
   ]);
 
 
