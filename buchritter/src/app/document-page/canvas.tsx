@@ -19,7 +19,7 @@ export const docStyle = {
   },
 };
 
-type CustomElement = { type: 'paragraph' | 'code'; children: CustomText[] };
+type CustomElement = { type: 'paragraph' | 'code' | null; children: CustomText[] };
 type CustomText = { text: string }
 
 declare module 'slate' {
@@ -72,6 +72,22 @@ export function RichTextEditor({ updateState, state }: { updateState: (key: any,
     return <Leaf {...props} />
   }, []);
 
+  const CustomEditor = {
+    isBoldActive(editor: Editor) {
+      const marks: any = Editor.marks(editor);
+      return marks ? marks.bold === true : false;
+    },
+
+    toggleBold(editor: Editor) {
+      const isActive = CustomEditor.isBoldActive(editor);
+      if (isActive) {
+        Editor.removeMark(editor, 'bold');
+      } else {
+        Editor.addMark(editor, 'bold', true);
+      }
+    },
+
+  }
 
   return (
     <div className="flex justify-center w-screen p-2">
@@ -95,29 +111,9 @@ export function RichTextEditor({ updateState, state }: { updateState: (key: any,
             }
 
             switch (event.key) {
-              // Switches to code mode
-              case '`': {
-                event.preventDefault();
-
-                const [match] = Editor.nodes(editor, {
-                  match: n => (n as any).type === 'code',
-                })
-
-                Transforms.setNodes(
-                  editor,
-                  { type: match ? 'paragraph' : 'code' },
-                  { match: n => Element.isElement(n) && Editor.isBlock(editor, n) }
-                )
-
-                break;
-              }
-
               case 'b': {
                 event.preventDefault();
-
-                updateState('bold', !state.bold);
-                Editor.addMark(editor, 'bold', !state.bold);
-
+                CustomEditor.toggleBold(editor);
                 break;
               }
             }
@@ -133,11 +129,11 @@ export function ToolBar({ updateState, state }: { updateState: (key: any, value:
   return(
     <div className="bg-[rgb(50,50,50)] h-auto p-2 flex flex-row">
       <div className="pr-2">Toolbar: </div>
-      <div className="pr-2" onClick={() => updateState("bold", !state.bold)}>Bold</div>
-      <div className="pr-2" onClick={() => updateState("italic", !state.italic)}>Italic</div>
-      <div className="pr-2" onClick={() => updateState("underline", !state.underline)}>Underline</div>
-      <div className="pr-2">Bullet Point</div>
-      <div className="pr-2">Numbered List</div>
+      <button className={`mr-2 pr-1 pl-1 border-2 rounded hover:bg-gray-700 ${state.bold ? "bg-gray-700" : "bg-[rgb(50,50,50)]"}`} onClick={() => updateState("bold", !state.bold)}>Bold</button>
+      <button className="mr-2 pr-1 pl-1 border-2 rounded hover:bg-gray-700" onClick={() => updateState("italic", !state.italic)}>Italic</button>
+      <button className="mr-2 pr-1 pl-1 border-2 rounded hover:bg-gray-700" onClick={() => updateState("underline", !state.underline)}>Underline</button>
+      <button className="mr-2 pr-1 pl-1 border-2 rounded hover:bg-gray-700">Bullet Point</button>
+      <button className="mr-2 pr-1 pl-1 border-2 rounded hover:bg-gray-700">Numbered List</button>
     </div>
   );
 }
