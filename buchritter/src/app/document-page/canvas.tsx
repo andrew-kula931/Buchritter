@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useCallback, useMemo, useRef, useState } from "react";
-import { createEditor, Descendant, Editor, Transforms, Element as SlateElement, BaseEditor } from "slate";
-import { Slate, Editable, withReact, useSlate } from "slate-react";
+import { Transforms, createEditor, Descendant, Element, BaseEditor, Editor } from "slate";
+import { Slate, Editable, withReact, ReactEditor } from "slate-react";
 import { withHistory } from 'slate-history'
 
 export const docStyle = {
@@ -19,33 +19,130 @@ export const docStyle = {
   },
 };
 
-const HOTKEYS = {
-  'mod+b': 'bold',
-  'mod+i': 'italic'
+type CustomElement = { type: 'paragraph' | 'code'; children: CustomText[] };
+type CustomText = { text: string }
+
+declare module 'slate' {
+  interface CustomTypes {
+    Editor: BaseEditor & ReactEditor
+    Element: CustomElement
+    Text: CustomText
+  }
 }
 
-const LIST_TYPES = ['numbered-list', 'bulleted-list'];
-const TEXT_ALIGN_TYPES = ['left', 'center', 'right', 'justify'];
-
-export function RichTextEditor() {
+export function RichTextEditor({ updateState, state }: { updateState: (key: any, value: any) => void; state: any }) {
   const editor = useMemo(() => withHistory(withReact(createEditor())), []);
   const [value, setValue] = useState<Descendant[]>([
-    { children: [{ text: "Start typing..." }] },
+    { type: 'paragraph', children: [{ text: 'A line of text. '}]}
   ]);
+
+  const DefaultElement = (props: any) => {
+    return <p {...props.attributes}>{props.children}</p>
+  }
+
+  const CodeElement = (props: any) => {
+    return (
+      <pre {...props.attributes}>
+        <code>{props.children}</code>
+      </pre>
+    )
+  };
+
+  const Leaf = (props: any) => {
+    return (
+      <span
+        {...props.attributes}
+        style={{ fontWeight: props.leaf.bold ? 'bold' : 'normal' }}
+      >
+        {props.children}
+      </span>
+    )
+  }
+
+  const renderElement = useCallback((props: any) => {
+    switch (props.element.type) {
+      case 'code':
+        return <CodeElement {...props} />
+      default:
+        return <DefaultElement {...props} />
+    }
+  }, []);
+
+  const renderLeaf = useCallback((props: any) => {
+    return <Leaf {...props} />
+  }, []);
 
 
   return (
-    <Slate editor={editor} initialValue={value} onChange={setValue}>
-      <Editable 
-        placeholder="Enter text..." 
-        spellCheck 
-        className="border p-2 min-h-[100px]" 
-        autoFocus
-        />
-    </Slate>
+    <div className="flex justify-center w-screen p-2">
+      <Slate editor={editor} initialValue={value} onChange={setValue}>
+        <Editable 
+          renderElement={renderElement}
+          renderLeaf={renderLeaf}
+          spellCheck 
+          className="border p-2 min-h-[100px] w-4xl" 
+          autoFocus
+          onKeyDown={event => {
+            // All single keystroke configurations
+            if (event.key === 'Tab') {
+              event.preventDefault();
+              editor.insertText('\t');
+            }
+
+            // All control based keystroke configurations
+            if (!event.ctrlKey) {
+              return
+            }
+
+            switch (event.key) {
+              // Switches to code mode
+              case '`': {
+                event.preventDefault();
+
+                const [match] = Editor.nodes(editor, {
+                  match: n => (n as any).type === 'code',
+                })
+
+                Transforms.setNodes(
+                  editor,
+                  { type: match ? 'paragraph' : 'code' },
+                  { match: n => Element.isElement(n) && Editor.isBlock(editor, n) }
+                )
+
+                break;
+              }
+
+              case 'b': {
+                event.preventDefault();
+
+                updateState('bold', !state.bold);
+                Editor.addMark(editor, 'bold', !state.bold);
+
+                break;
+              }
+            }
+          }}
+          />
+      </Slate>
+    </div>
   );
 }
 
+
+export function ToolBar({ updateState, state }: { updateState: (key: any, value: any) => void; state: any }) {
+  return(
+    <div className="bg-[rgb(50,50,50)] h-auto p-2 flex flex-row">
+      <div className="pr-2">Toolbar: </div>
+      <div className="pr-2" onClick={() => updateState("bold", !state.bold)}>Bold</div>
+      <div className="pr-2" onClick={() => updateState("italic", !state.italic)}>Italic</div>
+      <div className="pr-2" onClick={() => updateState("underline", !state.underline)}>Underline</div>
+      <div className="pr-2">Bullet Point</div>
+      <div className="pr-2">Numbered List</div>
+    </div>
+  );
+}
+
+/*
 export function Canvas(state: any) {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const [text, setText] = useState("");
@@ -91,16 +188,4 @@ export function Canvas(state: any) {
     </div>
   );
 }
-
-export function ToolBar({ updateState, state }: { updateState: (key: any, value: any) => void; state: any }) {
-  return(
-    <div className="bg-[rgb(50,50,50)] h-auto p-2 flex flex-row">
-      <div className="pr-2">Toolbar: </div>
-      <div className="pr-2" onClick={() => updateState("bold", !state.bold)}>Bold</div>
-      <div className="pr-2" onClick={() => updateState("italic", !state.italic)}>Italic</div>
-      <div className="pr-2" onClick={() => updateState("underline", !state.underline)}>Underline</div>
-      <div className="pr-2">Bullet Point</div>
-      <div className="pr-2">Numbered List</div>
-    </div>
-  );
-}
+*/

@@ -1,6 +1,6 @@
 "use client"
 
-import { Canvas, ToolBar, RichTextEditor } from "./canvas";
+import { ToolBar, RichTextEditor } from "./canvas";
 import React, { useState } from "react";
 
 export default function CanvasController() {
@@ -18,7 +18,7 @@ export default function CanvasController() {
   return (
     <div>
       <ToolBar updateState={updateState} state={state}/>
-      <RichTextEditor />
+      <RichTextEditor updateState={updateState} state={state} />
     </div>
   );
 }
