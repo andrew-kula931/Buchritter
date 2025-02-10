@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useCallback, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Transforms, createEditor, Descendant, Element, BaseEditor, Editor } from "slate";
-import { Slate, Editable, withReact, ReactEditor } from "slate-react";
-import { withHistory } from 'slate-history'
+import { Slate, Editable, withReact, ReactEditor, RenderElementProps } from "slate-react";
+import { withHistory, HistoryEditor } from 'slate-history'
+import { EditorState } from './canvas_controller';
 
 export const docStyle = {
   document: {
@@ -24,23 +25,37 @@ type CustomText = { text: string }
 
 declare module 'slate' {
   interface CustomTypes {
-    Editor: BaseEditor & ReactEditor
+    Editor: BaseEditor & ReactEditor & HistoryEditor
     Element: CustomElement
     Text: CustomText
   }
 }
 
-export function RichTextEditor({ updateState, state }: { updateState: (key: any, value: any) => void; state: any }) {
+export function RichTextEditor({ updateState, state }: { updateState: (key: any, value: boolean | string) => void; state: EditorState }) {
   const editor = useMemo(() => withHistory(withReact(createEditor())), []);
   const [value, setValue] = useState<Descendant[]>([
     { type: 'paragraph', children: [{ text: 'A line of text. '}]}
   ]);
 
-  const DefaultElement = (props: any) => {
-    return <p {...props.attributes}>{props.children}</p>
-  }
+  // Event listeners
+  useEffect(() => {
+    CustomEditor.toggleBold(editor);
+  }, [state.bold]);
 
-  const CodeElement = (props: any) => {
+  useEffect(() => {
+    CustomEditor.toggleItalic(editor);
+  }, [state.italic]);
+
+  useEffect(() => {
+    CustomEditor.toggleUnderline(editor);
+  }, [state.underline]);
+
+  // Custom Elements for the editor
+  const DefaultElement = (props: RenderElementProps) => {
+    return <p {...props.attributes}>{props.children}</p>
+  };
+
+  const CodeElement = (props: RenderElementProps) => {
     return (
       <pre {...props.attributes}>
         <code>{props.children}</code>
@@ -52,14 +67,19 @@ export function RichTextEditor({ updateState, state }: { updateState: (key: any,
     return (
       <span
         {...props.attributes}
-        style={{ fontWeight: props.leaf.bold ? 'bold' : 'normal' }}
+        style={{ 
+          fontWeight: props.leaf.bold ? 'bold' : 'normal',
+          fontStyle: props.leaf.italic ? 'italic' : 'normal',
+          textDecoration: props.leaf.underline ? 'underline' : 'none'
+        }}
       >
         {props.children}
       </span>
     )
   }
 
-  const renderElement = useCallback((props: any) => {
+  // Rendering Callbacks
+  const renderElement = useCallback((props: RenderElementProps) => {
     switch (props.element.type) {
       case 'code':
         return <CodeElement {...props} />
@@ -72,6 +92,7 @@ export function RichTextEditor({ updateState, state }: { updateState: (key: any,
     return <Leaf {...props} />
   }, []);
 
+  // This is where all of the editor functions are handled
   const CustomEditor = {
     isBoldActive(editor: Editor) {
       const marks: any = Editor.marks(editor);
@@ -87,12 +108,58 @@ export function RichTextEditor({ updateState, state }: { updateState: (key: any,
       }
     },
 
+    isItalicActive(editor: Editor) {
+      const marks: any = Editor.marks(editor);
+      return marks ? marks.italic === true : false;
+    },
+
+    toggleItalic(editor: Editor) {
+      const isActive = CustomEditor.isItalicActive(editor);
+      if (isActive) {
+        Editor.removeMark(editor, 'italic');
+      } else {
+        Editor.addMark(editor, 'italic', true);
+      }
+    },
+
+    isUnderlineActive(editor: Editor) {
+      const marks: any = Editor.marks(editor);
+      return marks ? marks.underline === true : false;
+    },
+
+    toggleUnderline(editor: Editor) {
+      const isActive = CustomEditor.isUnderlineActive(editor);
+      if (isActive) {
+        Editor.removeMark(editor, 'underline');
+      } else {
+        Editor.addMark(editor, 'underline', true);
+      }
+    },
+
+    isCodeActive(editor: Editor) {
+      const [match] = Editor.nodes(editor, {
+        match: n => Element.isElement(n) && n.type === 'code',
+      });
+
+      return !!match;
+    },
+
+    toggleCode(editor: Editor) {
+      const isActive = CustomEditor.isCodeActive(editor);
+
+      Transforms.setNodes(
+        editor,
+        { type: isActive ? 'paragraph' : 'code' },
+        { match: n => Element.isElement(n) && Editor.isBlock(editor, (n as CustomElement)) }
+      )
+    }
   }
 
   return (
     <div className="flex justify-center w-screen p-2">
       <Slate editor={editor} initialValue={value} onChange={setValue}>
         <Editable 
+          style={{ height: '500px' }}
           renderElement={renderElement}
           renderLeaf={renderLeaf}
           spellCheck 
@@ -116,6 +183,24 @@ export function RichTextEditor({ updateState, state }: { updateState: (key: any,
                 CustomEditor.toggleBold(editor);
                 break;
               }
+
+              case 'i': {
+                event.preventDefault();
+                CustomEditor.toggleItalic(editor);
+                break;
+              }
+
+              case 'u': {
+                event.preventDefault();
+                CustomEditor.toggleUnderline(editor);
+                break;
+              }
+
+              case '`': {
+                event.preventDefault();
+                CustomEditor.toggleCode(editor);
+                break;
+              }
             }
           }}
           />
@@ -125,63 +210,15 @@ export function RichTextEditor({ updateState, state }: { updateState: (key: any,
 }
 
 
-export function ToolBar({ updateState, state }: { updateState: (key: any, value: any) => void; state: any }) {
+export function ToolBar({ updateState, state }: { updateState: (key: any, value: boolean | string) => void; state: EditorState }) {
   return(
     <div className="bg-[rgb(50,50,50)] h-auto p-2 flex flex-row">
       <div className="pr-2">Toolbar: </div>
       <button className={`mr-2 pr-1 pl-1 border-2 rounded hover:bg-gray-700 ${state.bold ? "bg-gray-700" : "bg-[rgb(50,50,50)]"}`} onClick={() => updateState("bold", !state.bold)}>Bold</button>
-      <button className="mr-2 pr-1 pl-1 border-2 rounded hover:bg-gray-700" onClick={() => updateState("italic", !state.italic)}>Italic</button>
-      <button className="mr-2 pr-1 pl-1 border-2 rounded hover:bg-gray-700" onClick={() => updateState("underline", !state.underline)}>Underline</button>
+      <button className={`mr-2 pr-1 pl-1 border-2 rounded hover:bg-gray-700 ${state.italic ? "bg-gray-700" : "bg-[rgb(50,50,50)]"}`} onClick={() => updateState("italic", !state.italic)}>Italic</button>
+      <button className={`mr-2 pr-1 pl-1 border-2 rounded hover:bg-gray-700 ${state.underline ? "bg-gray-700" : "bg-[rgb(50,50,50)]" }`} onClick={() => updateState("underline", !state.underline)}>Underline</button>
       <button className="mr-2 pr-1 pl-1 border-2 rounded hover:bg-gray-700">Bullet Point</button>
       <button className="mr-2 pr-1 pl-1 border-2 rounded hover:bg-gray-700">Numbered List</button>
     </div>
   );
 }
-
-/*
-export function Canvas(state: any) {
-  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
-  const [text, setText] = useState("");
-
-  const keyDown = (event: { key: string; preventDefault: () => void; }) => {
-    if (event.key === "Tab") {
-      event.preventDefault();
-
-      const textarea = textareaRef.current;
-      if (!textarea) return;
-
-      const start = textarea.selectionStart;
-      const value = textarea.value;
-      const newValue = value.substring(0, start) + '\t' + value.substring(start);
-
-      //Updates state rather than textarea value
-      setText(newValue);
-
-      requestAnimationFrame(() => {
-        if (textareaRef.current) {
-          textareaRef.current.selectionStart = textareaRef.current.selectionEnd = start + 1;
-        }
-      })
-    }
-  }
-
-  return(
-    <div style={docStyle.document}>
-      <textarea
-        className="textareaDefault w-760px p-10px bg-[rgb(66, 66, 66)]"
-        ref={textareaRef}
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-        onKeyDown={keyDown}
-        rows={40}
-        cols={40}
-        style={{
-          borderRadius: "5px", 
-          fontSize: "16px",
-          tabSize: 8,
-        }}
-      />
-    </div>
-  );
-}
-*/
