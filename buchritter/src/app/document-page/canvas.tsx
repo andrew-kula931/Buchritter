@@ -5,6 +5,17 @@ import { Transforms, createEditor, Descendant, Element, BaseEditor, Editor } fro
 import { Slate, Editable, withReact, ReactEditor, RenderElementProps } from "slate-react";
 import { withHistory, HistoryEditor } from 'slate-history'
 import { EditorState } from './canvas_controller';
+import { PrismaClient } from '@prisma/client';
+
+// Database setup
+const prisma = new PrismaClient();
+
+async function main() {
+  const allUsers = await prisma.user.findMany();
+}
+
+main();
+
 
 export const docStyle = {
   document: {

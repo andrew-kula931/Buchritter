@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@prisma/client": "^6.3.1",
     "@tailwindcss/postcss": "^4.0.3",
     "immutable": "^5.0.3",
     "lucide-react": "^0.474.0",
