@@ -5,16 +5,6 @@ import { Transforms, createEditor, Descendant, Element, BaseEditor, Editor } fro
 import { Slate, Editable, withReact, ReactEditor, RenderElementProps } from "slate-react";
 import { withHistory, HistoryEditor } from 'slate-history'
 import { EditorState } from './canvas_controller';
-import { PrismaClient } from '@prisma/client';
-
-// Database setup
-const prisma = new PrismaClient();
-
-async function main() {
-  const allUsers = await prisma.user.findMany();
-}
-
-main();
 
 
 export const docStyle = {
@@ -230,6 +220,7 @@ export function ToolBar({ updateState, state }: { updateState: (key: any, value:
       <button className={`mr-2 pr-1 pl-1 border-2 rounded hover:bg-gray-700 ${state.underline ? "bg-gray-700" : "bg-[rgb(50,50,50)]" }`} onClick={() => updateState("underline", !state.underline)}>Underline</button>
       <button className="mr-2 pr-1 pl-1 border-2 rounded hover:bg-gray-700">Bullet Point</button>
       <button className="mr-2 pr-1 pl-1 border-2 rounded hover:bg-gray-700">Numbered List</button>
+      <button className="mr-2 pr-1 pl-1 border-2 rounded hover:bg-gray-700" >Query Table</button>
     </div>
   );
 }
