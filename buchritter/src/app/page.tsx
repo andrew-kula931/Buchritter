@@ -17,7 +17,7 @@ function TitleBar() {
   return (
     <div className="navBar">
       <div style={{fontSize: 40}}>Buch Ritter</div>
-      <Link href="/document-page">Go to Document</Link>
+      <Link href="/document_page">Go to Document</Link>
     </div>
   );
 }
@@ -35,7 +35,7 @@ function File({ text, idx } : {text:string, idx:number}) {
   return (
   <li>
     <div className={`p-2 ${color} hover:bg-gray-500`} onClick={handleClick}>
-      <a href="/document-page" ref={linkRef} style={{ display: 'none'}}>To Doc</a>
+      <a href="/document_page" ref={linkRef} style={{ display: 'none'}}>To Doc</a>
       {text}
     </div>
   </li>

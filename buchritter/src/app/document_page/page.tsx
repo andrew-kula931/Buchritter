@@ -1,13 +1,9 @@
 import Link from "next/link";
 
-import { Canvas, ToolBar, docStyle } from "./canvas";
 import CanvasController from "./canvas_controller";
 
-export default function DocumentPage() {
 
-  //TODO: Providers cause unnecessary rebuilds
-  //Replace it with a parent component that passes
-  //down state values and callbacks
+export default function DocumentPage() {
 
   return (
     <div>

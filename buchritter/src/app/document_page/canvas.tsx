@@ -5,8 +5,9 @@ import { Transforms, createEditor, Descendant, Element, BaseEditor, Editor } fro
 import { Slate, Editable, withReact, ReactEditor, RenderElementProps } from "slate-react";
 import { withHistory, HistoryEditor } from 'slate-history'
 import { EditorState } from './canvas_controller';
+import { getDoc } from '../../server/api/requests';
 
-
+//Styling
 export const docStyle = {
   document: {
     width: "800px",
@@ -21,8 +22,16 @@ export const docStyle = {
   },
 };
 
+//Typescript interfacing
 type CustomElement = { type: 'paragraph' | 'code' | null; children: CustomText[] };
 type CustomText = { text: string }
+type Document = {
+  id: number;
+  name: string;
+  created_at: string;
+  updated_at: string | null;
+  body: string | null;
+} | null
 
 declare module 'slate' {
   interface CustomTypes {
@@ -32,13 +41,38 @@ declare module 'slate' {
   }
 }
 
+//RichText Editor
 export function RichTextEditor({ updateState, state }: { updateState: (key: any, value: boolean | string) => void; state: EditorState }) {
-  const editor = useMemo(() => withHistory(withReact(createEditor())), []);
+  // Page setup
+  const [doc, updateDoc] = useState<Document | null>(null);
   const [value, setValue] = useState<Descendant[]>([
-    { type: 'paragraph', children: [{ text: 'A line of text. '}]}
+    { type: 'paragraph', children: [{ text: ''}]}
   ]);
 
-  // Event listeners
+  useEffect(() => {
+    const fetchData = async () => {
+      const document: Document = await getDoc();
+      updateDoc(document);
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    if (doc) {
+      setValue([{ type: 'paragraph', children: [{ text: doc.body ?? 'Untitled'}]}]);
+    }
+  }, [doc]);
+
+  const editor = useMemo(() => withHistory(withReact(createEditor())), []);
+
+  //Main value changer (Listener)
+  useEffect(() => {
+    editor.children = value;
+    editor.onChange();
+  }, [value]);
+
+  // Misc. event listeners
   useEffect(() => {
     CustomEditor.toggleBold(editor);
   }, [state.bold]);
