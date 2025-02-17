@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState, useRef } from "react";
 import { Transforms, createEditor, Descendant, Element, BaseEditor, Editor } from "slate";
 import { Slate, Editable, withReact, ReactEditor, RenderElementProps } from "slate-react";
 import { withHistory, HistoryEditor } from 'slate-history'
 import { EditorState } from './canvas_controller';
-import { getDoc } from '../../server/api/requests';
+import { getDoc, updateDocument } from '../../server/api/requests';
 
 //Styling
 export const docStyle = {
@@ -41,14 +41,21 @@ declare module 'slate' {
   }
 }
 
-//RichText Editor
+/**
+ * This RichText Editor consits of a A-4 document sized text area.
+ * State refers to the object contain all configurable values:
+ * @param - Bold, Italic, Underline
+ */
 export function RichTextEditor({ updateState, state }: { updateState: (key: any, value: boolean | string) => void; state: EditorState }) {
+
   // Page setup
   const [doc, updateDoc] = useState<Document | null>(null);
   const [value, setValue] = useState<Descendant[]>([
     { type: 'paragraph', children: [{ text: ''}]}
   ]);
+  const saveTimeout = useRef<NodeJS.Timeout | null>(null);
 
+  // The following two effects pulls information from the database and displays it on the canvas
   useEffect(() => {
     const fetchData = async () => {
       const document: Document = await getDoc();
@@ -65,6 +72,7 @@ export function RichTextEditor({ updateState, state }: { updateState: (key: any,
   }, [doc]);
 
   const editor = useMemo(() => withHistory(withReact(createEditor())), []);
+
 
   //Main value changer (Listener)
   useEffect(() => {
@@ -200,6 +208,20 @@ export function RichTextEditor({ updateState, state }: { updateState: (key: any,
           spellCheck 
           className="border p-2 min-h-[100px] w-4xl" 
           autoFocus
+          onChange={value => {
+            const autoSave = () => {
+              const isAstChange = editor.operations.some(
+                op => 'set_selection' !== op.type
+              );
+
+              if (isAstChange && doc) {
+                if (saveTimeout.current) clearTimeout(saveTimeout.current);
+                saveTimeout.current = setTimeout(() => {
+                  // Need to finish this line: updateDocument(doc.id, value);
+                }, 1000);
+              }
+            }
+          }}
           onKeyDown={event => {
             // All single keystroke configurations
             if (event.key === 'Tab') {
@@ -254,7 +276,6 @@ export function ToolBar({ updateState, state }: { updateState: (key: any, value:
       <button className={`mr-2 pr-1 pl-1 border-2 rounded hover:bg-gray-700 ${state.underline ? "bg-gray-700" : "bg-[rgb(50,50,50)]" }`} onClick={() => updateState("underline", !state.underline)}>Underline</button>
       <button className="mr-2 pr-1 pl-1 border-2 rounded hover:bg-gray-700">Bullet Point</button>
       <button className="mr-2 pr-1 pl-1 border-2 rounded hover:bg-gray-700">Numbered List</button>
-      <button className="mr-2 pr-1 pl-1 border-2 rounded hover:bg-gray-700" >Query Table</button>
     </div>
   );
 }

@@ -9,3 +9,14 @@ export async function getDoc() {
 
   return doc;
 }
+
+export async function updateDocument(id: number, bodyText: string) {
+  const doc = await prisma.documents.update({
+    where: {
+      id: 1,
+    },
+    data: {
+      body: bodyText,
+    },
+  });
+}

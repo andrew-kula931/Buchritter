@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import CanvasController from "./canvas_controller";
+import { FaHome } from "react-icons/fa";
 
 
 export default function DocumentPage() {
@@ -15,7 +16,9 @@ export default function DocumentPage() {
           maxLength={30}
           defaultValue="Doc Name"
         />
-        <Link href="/">Click here to go back</Link>
+        <Link href="/">
+          <FaHome size={24} color="white" /> 
+        </Link>
       </div>
 
       <CanvasController />
