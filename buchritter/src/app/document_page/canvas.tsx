@@ -6,8 +6,8 @@ import { Slate, Editable, withReact, ReactEditor, RenderElementProps } from "sla
 import { withHistory, HistoryEditor } from 'slate-history'
 import { EditorState } from './canvas_controller';
 import { getDoc, updateDocument } from '../../server/api/requests';
-import { Prisma } from "@prisma/client";
 import { JsonValue } from "@prisma/client/runtime/library";
+import { Truculenta } from "next/font/google";
 
 //Styling
 export const docStyle = {
@@ -56,6 +56,16 @@ export function RichTextEditor({ updateState, state }: { updateState: (key: any,
     { type: 'paragraph', children: [{ text: ''}]}
   ]);
   const saveTimeout = useRef<NodeJS.Timeout | null>(null);
+  function resetState(state: EditorState) {
+    state.bold = false;
+    state.italic = false;
+    state.underline = false;
+    state.lineThrough = false;
+    state.bulleted_list = false;
+    state.numbered_list = false;
+    state.code = false;
+    state.align = "left";
+  }
 
   // The following two effects pulls information from the database and displays it on the canvas
   useEffect(() => {
@@ -77,11 +87,12 @@ export function RichTextEditor({ updateState, state }: { updateState: (key: any,
   const editor = useMemo(() => withHistory(withReact(createEditor())), []);
 
 
-  //Main value changer (Listener)
+  // Main listener for text changes
   useEffect(() => {
     editor.children = value;
     editor.onChange();
   }, [value]);
+
 
   // Misc. event listeners
   useEffect(() => {
@@ -95,6 +106,53 @@ export function RichTextEditor({ updateState, state }: { updateState: (key: any,
   useEffect(() => {
     CustomEditor.toggleUnderline(editor);
   }, [state.underline]);
+
+  useEffect(() => {
+    CustomEditor.toggleBulleted(editor);
+  }, [state.bulleted_list]);
+
+  useEffect(() => {
+    CustomEditor.toggleNumbered(editor);
+  }, [state.numbered_list]);
+
+  useEffect(() => {
+    CustomEditor.toggleCode(editor);
+  }, [state.code]);
+
+  // Listener to update state on click
+  const handleSelection = () => {
+    if (!editor.selection) return;
+
+    const nodeEntry = Editor.above(editor, {
+      match: (n) => Editor.isBlock(editor, (n as CustomElement)),
+    });
+
+    if (nodeEntry) {
+      const [node] = nodeEntry;
+      resetState(state);
+
+      switch ((node as CustomElement).type) {
+        case "bulleted-list":
+          state.bulleted_list = true;
+          break;
+        case "numbered-list":
+          state.numbered_list = true;
+          break;
+        case "code":
+          state.code = true;
+          break;
+        default:
+          break;
+      }
+
+      /**
+       * 
+       * Need to call updateState() to update the value in the controller
+       * 
+       */
+
+    } 
+  };
 
   // Custom Elements for the editor
   const DefaultElement = (props: RenderElementProps) => {
@@ -117,6 +175,14 @@ export function RichTextEditor({ updateState, state }: { updateState: (key: any,
     )
   };
 
+  const NumberedList = (props: RenderElementProps) => {
+    return (
+      <ol {...props.attributes} className="ml-6 list-decimal">
+        <li>{props.children}</li>
+      </ol>
+    )
+  };
+
   const Leaf = (props: any) => {
     return (
       <span
@@ -132,6 +198,7 @@ export function RichTextEditor({ updateState, state }: { updateState: (key: any,
     )
   }
 
+
   // Rendering Callbacks
   const renderElement = useCallback((props: RenderElementProps) => {
     switch (props.element.type) {
@@ -139,6 +206,8 @@ export function RichTextEditor({ updateState, state }: { updateState: (key: any,
         return <CodeElement {...props} />
       case 'bulleted-list':
         return <BulletedList {...props} />
+      case 'numbered-list':
+        return <NumberedList {...props} />
       default:
         return <DefaultElement {...props} />
     }
@@ -147,6 +216,7 @@ export function RichTextEditor({ updateState, state }: { updateState: (key: any,
   const renderLeaf = useCallback((props: any) => {
     return <Leaf {...props} />
   }, []);
+
 
   // This is where all of the editor functions are handled
   const CustomEditor = {
@@ -226,6 +296,24 @@ export function RichTextEditor({ updateState, state }: { updateState: (key: any,
         { type: isActive ? 'paragraph' : 'bulleted-list' },
         { match: n => Element.isElement(n) && Editor.isBlock(editor, (n as CustomElement)) }
       )
+    },
+
+    isNumberedActive(editor: Editor) {
+      const [match] = Editor.nodes(editor, {
+        match: n => Element.isElement(n) && n.type === 'numbered-list',
+      });
+
+      return !!match;
+    },
+
+    toggleNumbered(editor: Editor) {
+      const isActive = CustomEditor.isNumberedActive(editor);
+
+      Transforms.setNodes(
+        editor,
+        { type: isActive ? 'paragraph' : 'numbered-list' },
+        { match: n => Element.isElement(n) && Editor.isBlock(editor, (n as CustomElement)) }
+      )
     }
   }
 
@@ -252,9 +340,10 @@ export function RichTextEditor({ updateState, state }: { updateState: (key: any,
           style={{ height: '500px' }}
           renderElement={renderElement}
           renderLeaf={renderLeaf}
-          spellCheck 
+          spellCheck
           className="border p-2 min-h-[100px] w-4xl" 
           autoFocus
+          onSelect={() => handleSelection()}
           onKeyDown={event => {
             // All single keystroke configurations
             if (event.key === 'Tab') {
@@ -313,8 +402,9 @@ export function ToolBar({ updateState, state }: { updateState: (key: any, value:
       <button className={`mr-2 pr-1 pl-1 border-2 rounded hover:bg-gray-700 ${state.bold ? "bg-gray-700" : "bg-[rgb(50,50,50)]"}`} onClick={() => updateState("bold", !state.bold)}>Bold</button>
       <button className={`mr-2 pr-1 pl-1 border-2 rounded hover:bg-gray-700 ${state.italic ? "bg-gray-700" : "bg-[rgb(50,50,50)]"}`} onClick={() => updateState("italic", !state.italic)}>Italic</button>
       <button className={`mr-2 pr-1 pl-1 border-2 rounded hover:bg-gray-700 ${state.underline ? "bg-gray-700" : "bg-[rgb(50,50,50)]" }`} onClick={() => updateState("underline", !state.underline)}>Underline</button>
-      <button className="mr-2 pr-1 pl-1 border-2 rounded hover:bg-gray-700">Bullet Point</button>
-      <button className="mr-2 pr-1 pl-1 border-2 rounded hover:bg-gray-700">Numbered List</button>
+      <button className={`mr-2 pr-1 pl-1 border-2 rounded hover:bg-gray-700 ${state.bulleted_list ? "bg-gray-700" : "bg-[rgb(50,50,50)]" }`} onClick={() => updateState("bulleted_list", !state.bulleted_list)}>Bullet Point</button>
+      <button className={`mr-2 pr-1 pl-1 border-2 rounded hover:bg-gray-700 ${state.numbered_list ? "bg-gray-700" : "bg-[rgb(50,50,50)]" }`} onClick={() => updateState("numbered_list", !state.numbered_list)}>Numbered List</button>
+      <button className={`mr-2 pr-1 pl-1 border-2 rounded hover:bg-gray-700 ${state.code ? "bg-gray-700" : "bg-[rgb(50,50,50)]" }`} onClick={() => updateState("code", !state.code)}>Code</button>
     </div>
   );
 }

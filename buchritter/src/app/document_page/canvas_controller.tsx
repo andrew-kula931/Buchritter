@@ -8,6 +8,9 @@ export interface EditorState {
   italic: boolean;
   underline: boolean;
   lineThrough: boolean;
+  bulleted_list: boolean;
+  numbered_list: boolean;
+  code: boolean;
   align: "left" | "center" | "right" | "justify";
 }
 
@@ -17,6 +20,9 @@ export default function CanvasController() {
     italic: false,
     underline: false,
     lineThrough: false,
+    bulleted_list: false,
+    numbered_list: false,
+    code: false,
     align: "left"
   });
 
