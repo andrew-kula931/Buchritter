@@ -112,7 +112,7 @@ export function RichTextEditor({ updateState, state }: { updateState: (key: any,
   const BulletedList = (props: RenderElementProps) => {
     return (
       <ul {...props.attributes} className="ml-6 list-disc">
-        {props.children}
+        <li>{props.children}</li>
       </ul>
     )
   };
