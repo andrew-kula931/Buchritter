@@ -1,6 +1,6 @@
 "use server";
 
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -10,7 +10,10 @@ export async function getDoc() {
   return doc;
 }
 
-export async function updateDocument(id: number, bodyText: string) {
+export async function updateDocument(
+  id: number,
+  bodyText: Prisma.InputJsonValue | typeof Prisma.JsonNull
+) {
   const doc = await prisma.documents.update({
     where: {
       id: 1,

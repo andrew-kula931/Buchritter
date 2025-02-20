@@ -6,6 +6,8 @@ import { Slate, Editable, withReact, ReactEditor, RenderElementProps } from "sla
 import { withHistory, HistoryEditor } from 'slate-history'
 import { EditorState } from './canvas_controller';
 import { getDoc, updateDocument } from '../../server/api/requests';
+import { Prisma } from "@prisma/client";
+import { JsonValue } from "@prisma/client/runtime/library";
 
 //Styling
 export const docStyle = {
@@ -30,7 +32,7 @@ type Document = {
   name: string;
   created_at: string;
   updated_at: string | null;
-  body: string | null;
+  body: JsonValue;
 } | null
 
 declare module 'slate' {
@@ -43,7 +45,7 @@ declare module 'slate' {
 
 /**
  * This RichText Editor consits of a A-4 document sized text area.
- * State refers to the object contain all configurable values:
+ * State refers to the object containing all configurable values:
  * @param - Bold, Italic, Underline
  */
 export function RichTextEditor({ updateState, state }: { updateState: (key: any, value: boolean | string) => void; state: EditorState }) {
@@ -67,7 +69,8 @@ export function RichTextEditor({ updateState, state }: { updateState: (key: any,
 
   useEffect(() => {
     if (doc) {
-      setValue([{ type: 'paragraph', children: [{ text: doc.body ?? 'Untitled'}]}]);
+      const parsedContent: Descendant[] = (typeof doc.body === "string") ? JSON.parse(doc.body) : doc.body as Descendant[];
+      setValue(parsedContent);
     }
   }, [doc]);
 
@@ -200,7 +203,23 @@ export function RichTextEditor({ updateState, state }: { updateState: (key: any,
 
   return (
     <div className="flex justify-center w-screen p-2">
-      <Slate editor={editor} initialValue={value} onChange={setValue}>
+      <Slate 
+        editor={editor} 
+        initialValue={value} 
+        onChange={ newValue => {
+          setValue;
+          const isAstChange = editor.operations.some(
+            op => 'set_selection' !== op.type
+          );
+
+          if (isAstChange && doc) {
+            if (saveTimeout.current) clearTimeout(saveTimeout.current);
+            saveTimeout.current = setTimeout(() => {
+              const content = JSON.stringify(newValue);
+              updateDocument(doc.id, content);
+            }, 1500);
+          }}
+          }>
         <Editable 
           style={{ height: '500px' }}
           renderElement={renderElement}
@@ -208,20 +227,6 @@ export function RichTextEditor({ updateState, state }: { updateState: (key: any,
           spellCheck 
           className="border p-2 min-h-[100px] w-4xl" 
           autoFocus
-          onChange={value => {
-            const autoSave = () => {
-              const isAstChange = editor.operations.some(
-                op => 'set_selection' !== op.type
-              );
-
-              if (isAstChange && doc) {
-                if (saveTimeout.current) clearTimeout(saveTimeout.current);
-                saveTimeout.current = setTimeout(() => {
-                  // Need to finish this line: updateDocument(doc.id, value);
-                }, 1000);
-              }
-            }
-          }}
           onKeyDown={event => {
             // All single keystroke configurations
             if (event.key === 'Tab') {
