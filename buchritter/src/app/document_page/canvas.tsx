@@ -25,7 +25,7 @@ export const docStyle = {
 };
 
 //Typescript interfacing
-type CustomElement = { type: 'paragraph' | 'code' | null; children: CustomText[] };
+type CustomElement = { type: 'paragraph' | 'code' | 'bulleted-list' | 'numbered-list'; children: CustomText[] };
 type CustomText = { text: string }
 type Document = {
   id: number;
@@ -109,6 +109,14 @@ export function RichTextEditor({ updateState, state }: { updateState: (key: any,
     )
   };
 
+  const BulletedList = (props: RenderElementProps) => {
+    return (
+      <ul {...props.attributes} className="ml-6 list-disc">
+        {props.children}
+      </ul>
+    )
+  };
+
   const Leaf = (props: any) => {
     return (
       <span
@@ -129,6 +137,8 @@ export function RichTextEditor({ updateState, state }: { updateState: (key: any,
     switch (props.element.type) {
       case 'code':
         return <CodeElement {...props} />
+      case 'bulleted-list':
+        return <BulletedList {...props} />
       default:
         return <DefaultElement {...props} />
     }
@@ -198,6 +208,24 @@ export function RichTextEditor({ updateState, state }: { updateState: (key: any,
         { type: isActive ? 'paragraph' : 'code' },
         { match: n => Element.isElement(n) && Editor.isBlock(editor, (n as CustomElement)) }
       )
+    },
+
+    isBulletedActive(editor: Editor) {
+      const [match] = Editor.nodes(editor, {
+        match: n => Element.isElement(n) && n.type === 'bulleted-list',
+      });
+
+      return !!match;
+    },
+
+    toggleBulleted(editor: Editor) {
+      const isActive = CustomEditor.isBulletedActive(editor);
+
+      Transforms.setNodes(
+        editor,
+        { type: isActive ? 'paragraph' : 'bulleted-list' },
+        { match: n => Element.isElement(n) && Editor.isBlock(editor, (n as CustomElement)) }
+      )
     }
   }
 
@@ -261,6 +289,12 @@ export function RichTextEditor({ updateState, state }: { updateState: (key: any,
               case '`': {
                 event.preventDefault();
                 CustomEditor.toggleCode(editor);
+                break;
+              }
+
+              case 'e': {
+                event.preventDefault();
+                CustomEditor.toggleBulleted(editor);
                 break;
               }
             }
