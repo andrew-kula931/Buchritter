@@ -7,7 +7,6 @@ import { withHistory, HistoryEditor } from 'slate-history'
 import { EditorState } from './canvas_controller';
 import { getDoc, updateDocument } from '../../server/api/requests';
 import { JsonValue } from "@prisma/client/runtime/library";
-import { Truculenta } from "next/font/google";
 
 //Styling
 export const docStyle = {
@@ -26,7 +25,7 @@ export const docStyle = {
 
 //Typescript interfacing
 type CustomElement = { type: 'paragraph' | 'code' | 'bulleted-list' | 'numbered-list'; children: CustomText[] };
-type CustomText = { text: string }
+type CustomText = { text: string; bold?: boolean; italic?: boolean; underline?: boolean; }
 type Document = {
   id: number;
   name: string;
@@ -48,7 +47,9 @@ declare module 'slate' {
  * State refers to the object containing all configurable values:
  * @param - Bold, Italic, Underline
  */
-export function RichTextEditor({ updateState, state }: { updateState: (key: any, value: boolean | string) => void; state: EditorState }) {
+export function RichTextEditor({ updateState, state, updateVisualState, visualState }:
+   { updateState: (key: any, value: boolean | string) => void; state: EditorState;
+     updateVisualState: (key: any, value: boolean | string) => void; visualState: EditorState; }) {
 
   // Page setup
   const [doc, updateDoc] = useState<Document | null>(null);
@@ -94,7 +95,7 @@ export function RichTextEditor({ updateState, state }: { updateState: (key: any,
   }, [value]);
 
 
-  // Misc. event listeners
+  // Event listeners will only trigger on keystrokes and not on clicks
   useEffect(() => {
     CustomEditor.toggleBold(editor);
   }, [state.bold]);
@@ -129,28 +130,37 @@ export function RichTextEditor({ updateState, state }: { updateState: (key: any,
 
     if (nodeEntry) {
       const [node] = nodeEntry;
-      resetState(state);
+      let type = 'paragraph';
+      resetState(visualState);
 
       switch ((node as CustomElement).type) {
         case "bulleted-list":
-          state.bulleted_list = true;
+          visualState.bulleted_list = true;
+          type = 'bulleted-list';
           break;
         case "numbered-list":
-          state.numbered_list = true;
+          visualState.numbered_list = true;
+          type = 'numbered-list';
           break;
         case "code":
-          state.code = true;
+          visualState.code = true;
+          type = 'code';
           break;
         default:
           break;
       }
 
-      /**
-       * 
-       * Need to call updateState() to update the value in the controller
-       * 
-       */
-
+      updateVisualState(type, true);
+      
+      if (node.children?.some(child => (child as CustomText).bold)) {
+        updateVisualState('bold', true);
+      }
+      if (node.children?.some(child => (child as CustomText).italic)) {
+        updateVisualState('italic', true);
+      }
+      if (node.children?.some(child => (child as CustomText).underline)) {
+        updateVisualState('underline', true);
+      }
     } 
   };
 
@@ -360,30 +370,42 @@ export function RichTextEditor({ updateState, state }: { updateState: (key: any,
               case 'b': {
                 event.preventDefault();
                 CustomEditor.toggleBold(editor);
+                visualState.bold = !visualState.bold;
                 break;
               }
 
               case 'i': {
                 event.preventDefault();
                 CustomEditor.toggleItalic(editor);
+                visualState.italic = !visualState.italic;
                 break;
               }
 
               case 'u': {
                 event.preventDefault();
                 CustomEditor.toggleUnderline(editor);
+                visualState.underline = !visualState.underline;
                 break;
               }
 
               case '`': {
                 event.preventDefault();
                 CustomEditor.toggleCode(editor);
+                visualState.code = !visualState.code;
                 break;
               }
 
               case 'e': {
                 event.preventDefault();
                 CustomEditor.toggleBulleted(editor);
+                visualState.bulleted_list = !visualState.bulleted_list;
+                break;
+              }
+
+              case 'o': {
+                event.preventDefault();
+                CustomEditor.toggleNumbered(editor);
+                visualState.numbered_list = !visualState.numbered_list;
                 break;
               }
             }
@@ -395,16 +417,24 @@ export function RichTextEditor({ updateState, state }: { updateState: (key: any,
 }
 
 
-export function ToolBar({ updateState, state }: { updateState: (key: any, value: boolean | string) => void; state: EditorState }) {
+export function ToolBar({ updateState, state, updateVisualState, visualState }:
+   { updateState: (key: any, value: boolean | string) => void; state: EditorState;
+     updateVisualState: (key: any, value: boolean | string) => void; visualState: EditorState; }) {
   return(
     <div className="bg-[rgb(50,50,50)] h-auto p-2 flex flex-row">
       <div className="pr-2">Toolbar: </div>
-      <button className={`mr-2 pr-1 pl-1 border-2 rounded hover:bg-gray-700 ${state.bold ? "bg-gray-700" : "bg-[rgb(50,50,50)]"}`} onClick={() => updateState("bold", !state.bold)}>Bold</button>
-      <button className={`mr-2 pr-1 pl-1 border-2 rounded hover:bg-gray-700 ${state.italic ? "bg-gray-700" : "bg-[rgb(50,50,50)]"}`} onClick={() => updateState("italic", !state.italic)}>Italic</button>
-      <button className={`mr-2 pr-1 pl-1 border-2 rounded hover:bg-gray-700 ${state.underline ? "bg-gray-700" : "bg-[rgb(50,50,50)]" }`} onClick={() => updateState("underline", !state.underline)}>Underline</button>
-      <button className={`mr-2 pr-1 pl-1 border-2 rounded hover:bg-gray-700 ${state.bulleted_list ? "bg-gray-700" : "bg-[rgb(50,50,50)]" }`} onClick={() => updateState("bulleted_list", !state.bulleted_list)}>Bullet Point</button>
-      <button className={`mr-2 pr-1 pl-1 border-2 rounded hover:bg-gray-700 ${state.numbered_list ? "bg-gray-700" : "bg-[rgb(50,50,50)]" }`} onClick={() => updateState("numbered_list", !state.numbered_list)}>Numbered List</button>
-      <button className={`mr-2 pr-1 pl-1 border-2 rounded hover:bg-gray-700 ${state.code ? "bg-gray-700" : "bg-[rgb(50,50,50)]" }`} onClick={() => updateState("code", !state.code)}>Code</button>
+      <button className={`mr-2 pr-1 pl-1 border-2 rounded hover:bg-gray-700 ${visualState.bold ? "bg-gray-700" : "bg-[rgb(50,50,50)]"}`} 
+        onClick={() => {updateState("bold", !state.bold); visualState.bold = !visualState.bold}}>Bold</button>
+      <button className={`mr-2 pr-1 pl-1 border-2 rounded hover:bg-gray-700 ${visualState.italic ? "bg-gray-700" : "bg-[rgb(50,50,50)]"}`} 
+        onClick={() => {updateState("italic", !state.italic); visualState.italic = !visualState.italic}}>Italic</button>
+      <button className={`mr-2 pr-1 pl-1 border-2 rounded hover:bg-gray-700 ${visualState.underline ? "bg-gray-700" : "bg-[rgb(50,50,50)]" }`} 
+        onClick={() => {updateState("underline", !state.underline); visualState.underline = !visualState.underline}}>Underline</button>
+      <button className={`mr-2 pr-1 pl-1 border-2 rounded hover:bg-gray-700 ${visualState.bulleted_list ? "bg-gray-700" : "bg-[rgb(50,50,50)]" }`} 
+        onClick={() => {updateState("bulleted_list", !state.bulleted_list); visualState.bulleted_list = !visualState.bulleted_list}}>Bullet Point</button>
+      <button className={`mr-2 pr-1 pl-1 border-2 rounded hover:bg-gray-700 ${visualState.numbered_list ? "bg-gray-700" : "bg-[rgb(50,50,50)]" }`} 
+        onClick={() => {updateState("numbered_list", !state.numbered_list); visualState.numbered_list = !visualState.numbered_list}}>Numbered List</button>
+      <button className={`mr-2 pr-1 pl-1 border-2 rounded hover:bg-gray-700 ${visualState.code ? "bg-gray-700" : "bg-[rgb(50,50,50)]" }`} 
+        onClick={() => {updateState("code", !state.code); visualState.code = !visualState.code}}>Code</button>
     </div>
   );
 }
