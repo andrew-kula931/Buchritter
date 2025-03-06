@@ -21,7 +21,7 @@ export default function DocumentPage() {
         </Link>
       </div>
 
-      <CanvasController />
+      <CanvasController/>
 
     </div>
   );

@@ -45,11 +45,11 @@ declare module 'slate' {
 /**
  * This RichText Editor consits of a A-4 document sized text area.
  * State refers to the object containing all configurable values:
- * @param - Bold, Italic, Underline
+ * @param - Bold, Italic, Underline, Bulleted List, Numbered List, Code
  */
-export function RichTextEditor({ updateState, state, updateVisualState, visualState }:
+export function RichTextEditor({ updateState, state, updateVisualState, visualState, docId }:
    { updateState: (key: any, value: boolean | string) => void; state: EditorState;
-     updateVisualState: (key: any, value: boolean | string) => void; visualState: EditorState; }) {
+     updateVisualState: (key: any, value: boolean | string) => void; visualState: EditorState; docId: number }) {
 
   // Page setup
   const [doc, updateDoc] = useState<Document | null>(null);
@@ -71,7 +71,7 @@ export function RichTextEditor({ updateState, state, updateVisualState, visualSt
   // The following two effects pulls information from the database and displays it on the canvas
   useEffect(() => {
     const fetchData = async () => {
-      const document: Document = await getDoc();
+      const document: Document = await getDoc(docId);
       updateDoc(document);
     };
 
@@ -80,8 +80,12 @@ export function RichTextEditor({ updateState, state, updateVisualState, visualSt
 
   useEffect(() => {
     if (doc) {
-      const parsedContent: Descendant[] = (typeof doc.body === "string") ? JSON.parse(doc.body) : doc.body as Descendant[];
-      setValue(parsedContent);
+      if (doc.body) {
+        const parsedContent: Descendant[] = (typeof doc.body === "string") ? JSON.parse(doc.body) : doc.body as Descendant[];
+        setValue(parsedContent ?? '');
+      } else {
+        setValue([{ type: 'paragraph', children: [{ text: '' }]}]);
+      }
     }
   }, [doc]);
 
@@ -416,7 +420,10 @@ export function RichTextEditor({ updateState, state, updateVisualState, visualSt
   );
 }
 
-
+/**
+ * Small Toolbar the wraps the width of the screen. Has toggleable buttons for bold, italic, underline, bulleted_list,
+ * numbered_list, and code
+ */
 export function ToolBar({ updateState, state, updateVisualState, visualState }:
    { updateState: (key: any, value: boolean | string) => void; state: EditorState;
      updateVisualState: (key: any, value: boolean | string) => void; visualState: EditorState; }) {

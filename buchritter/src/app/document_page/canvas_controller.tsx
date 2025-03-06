@@ -2,6 +2,7 @@
 
 import { ToolBar, RichTextEditor } from "./canvas";
 import React, { useState } from "react";
+import { useSearchParams } from 'next/navigation';
 
 /**
  * Bold -> Boolean
@@ -32,6 +33,9 @@ export interface EditorState {
 }
 
 export default function CanvasController() {
+  const searchParams = useSearchParams();
+  const docId = searchParams.get("id") ?? 0;
+
   const [state, setState] = useState<EditorState>({
     bold: false,
     italic: false,
@@ -65,8 +69,7 @@ export default function CanvasController() {
   return (
     <div>
       <ToolBar updateState={updateState} state={state} updateVisualState={updateVisualState} visualState={visualState}/>
-      <RichTextEditor updateState={updateState} state={state} updateVisualState={updateVisualState} visualState={visualState}/>
+      <RichTextEditor updateState={updateState} state={state} updateVisualState={updateVisualState} visualState={visualState} docId={Number(docId)}/>
     </div>
   );
 }
-//<Canvas state={state}/>
