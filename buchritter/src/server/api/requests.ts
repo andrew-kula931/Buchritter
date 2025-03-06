@@ -44,3 +44,11 @@ export async function addDocument() {
     },
   });
 }
+
+export async function deleteDocument(id: number) {
+  const deleteDoc = await prisma.documents.delete({
+    where: {
+      id: id,
+    },
+  });
+}

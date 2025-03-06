@@ -1,8 +1,10 @@
-"use client"
+"use client";
 
 import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
-import { getDocuments, addDocument } from '../server/api/requests';
+import { getDocuments, addDocument, deleteDocument } from '../server/api/requests';
+import { Trash, X } from 'lucide-react';
+import File from '@/app/file';
 
 export default function Home() {
   return (
@@ -21,31 +23,16 @@ function TitleBar() {
   );
 }
 
-function File({ id, text, idx } : {id: number, text:string, idx:number}) {
-  const color = (idx % 2 === 0) ? "bg-gray-700" : "bg-gray-600";
-  const linkRef = useRef<HTMLAnchorElement>(null);
-
-  const handleClick = () => {
-    if (linkRef.current) {
-      linkRef.current.click();
-    }
-  }
-
-
-  return (
-  <li>
-    <div className={`p-2 ${color} hover:bg-gray-500`} onClick={handleClick}>
-      <a href={`/document_page?id=${id}`} ref={linkRef} style={{ display: 'none'}}>To Doc</a>
-      {text}
-    </div>
-  </li>
-  );
-}
 
 function DocFiles() {
   const [documents, setDocs] = useState<any[]>([]);
   const [loading, displayLoading] = useState(true);
   const [refresh, refreshPage] = useState(false);
+  const [deleteMode, setDeleteMode] = useState(false);
+
+  const toggleDeleteMode = () => {
+    setDeleteMode(!deleteMode);
+  }
 
   useEffect(() => {
     const fetchDocs = async () => {
@@ -68,14 +55,23 @@ function DocFiles() {
     refreshPage((prev) => !prev);
   };
 
+  const refreshList = () => {
+    refreshPage((prev) => !prev);
+  }
+
   return (
     <div className="flex flex-auto justify-center">
       <div className="flex flex-col pt-2 w-[95vw]">
-        <h2 className="text-[1.65rem] pb-2">Files</h2>
+        <div className="flex flex-row justify-between">
+          <h2 className="text-[1.65rem] pb-2">Files</h2>
+          <button onClick={toggleDeleteMode} className="p-2 text-red-500 hover:text-red-700">
+            {(!deleteMode) ? <Trash size={24}/> : <X size={24} />}
+          </button>
+        </div>
         <ul>
           {loading ? <p>Loading...</p> 
             : documents.map((doc, idx) => (
-              <File key={doc.id} id={doc.id} text={doc.name} idx={idx}/>
+              <File key={doc.id} id={doc.id} text={doc.name} idx={idx} deleteMode={deleteMode} refreshList={refreshList}/>
           ))}
           <button className="p-2" onClick={createDocHandler}>Add Item</button>
         </ul>
