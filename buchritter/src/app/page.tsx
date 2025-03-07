@@ -61,7 +61,7 @@ function DocFiles() {
 
   return (
     <div className="flex flex-auto justify-center">
-      <div className="flex flex-col pt-2 w-[95vw]">
+      <div className="flex flex-col pt-2 w-[50vw]">
         <div className="flex flex-row justify-between">
           <h2 className="text-[1.65rem] pb-2">Files</h2>
           <button onClick={toggleDeleteMode} className="p-2 text-red-500 hover:text-red-700">

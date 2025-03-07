@@ -31,6 +31,18 @@ export async function updateDocument(
   });
 }
 
+export async function updateName(id: number, nameText: string) {
+  const doc = await prisma.documents.update({
+    where: {
+      id: id,
+    },
+    data: {
+      updated_at: new Date().toString(),
+      name: nameText,
+    },
+  });
+}
+
 export async function getDocuments() {
   const docs = await prisma.documents.findMany();
   return docs;

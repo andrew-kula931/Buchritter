@@ -2,20 +2,14 @@ import Link from "next/link";
 
 import CanvasController from "./canvas_controller";
 import { FaHome } from "react-icons/fa";
-
+import DocTitle from "./title";
 
 export default function DocumentPage() {
 
   return (
-    <div>
+    <div className="w-[100%]">
       <div className="navBar">
-        <textarea
-          className="textareaDefault text-2xl"
-          rows={1}
-          cols={30}
-          maxLength={30}
-          defaultValue="Doc Name"
-        />
+        <DocTitle />
         <Link href="/">
           <FaHome size={24} color="white" /> 
         </Link>

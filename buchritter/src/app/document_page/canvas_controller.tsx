@@ -1,6 +1,7 @@
 "use client"
 
-import { ToolBar, RichTextEditor } from "./canvas";
+import { ToolBar } from "./toolbar";
+import { RichTextEditor } from "./canvas";
 import React, { useState } from "react";
 import { useSearchParams } from 'next/navigation';
 
