@@ -1,11 +1,14 @@
 import { useState, useRef, useEffect } from "react";
 import { getDocuments, addDocument, deleteDocument } from '../server/api/requests';
+import { FiChevronDown } from "react-icons/fi";
 
-export default function File({ id, text, idx, deleteMode, refreshList } : {id: number, text:string, idx:number, deleteMode:boolean, refreshList: () => void }) {
+export default function File({ id, text, idx, deleteMode, refreshList, type } : {id: number, text:string, idx:number, deleteMode:boolean, 
+    refreshList: () => void, type: "file" | "folder" }) {
   const color = (idx % 2 === 0) ? "bg-gray-700" : "bg-gray-600";
   const linkRef = useRef<HTMLAnchorElement>(null);
 
   const [isModalOpen, renderModal] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   
   const openModal = () => renderModal(true);
   const closeModal = () => renderModal(false);
@@ -20,6 +23,10 @@ export default function File({ id, text, idx, deleteMode, refreshList } : {id: n
     if (linkRef.current) {
       linkRef.current.click();
     }
+  }
+
+  const handleFileClick = () => {
+    setIsOpen(!isOpen);
   }
 
   const AlertModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) => {
@@ -69,11 +76,30 @@ export default function File({ id, text, idx, deleteMode, refreshList } : {id: n
   }
 
   return (
+  (type === "file") ? 
+
+  // File
   <li className="p-0.5">
     {(!deleteMode) ?
       <div key={"normal"} className={`p-2 ${color} hover:bg-gray-500`} onClick={handleClick}>
         <a href={`/document_page?id=${id}`} ref={linkRef} style={{ display: 'none'}}>To Doc</a>
         {text}
+      </div> :
+      <div>
+        <div key={"pulsing"} className={`p-2 bg-slate-500 hover:bg-gray-500 animate-pulse`} onClick={openModal}>
+          {text}
+        </div> 
+        <AlertModal isOpen={isModalOpen} onClose={closeModal} />
+      </div>
+    }
+  </li> :
+
+  // Folder 
+  <li className="p-0.5">
+    {(!deleteMode) ?
+      <div key={"normal"} className={`p-2 ${color} hover:bg-gray-500 flex flex-row cursor-pointer`} onClick={handleFileClick}>
+        <div className="pr-1" >{text}</div>
+        <FiChevronDown className={`mt-1 transition-transform duration-200 ${isOpen ? "rotate-0" : "rotate-90"}`} />
       </div> :
       <div>
         <div key={"pulsing"} className={`p-2 bg-slate-500 hover:bg-gray-500 animate-pulse`} onClick={openModal}>

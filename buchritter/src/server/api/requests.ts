@@ -48,11 +48,14 @@ export async function getDocuments() {
   return docs;
 }
 
-export async function addDocument() {
+export async function addDocument(type: "file" | "folder", parent?: number) {
   const newDoc = await prisma.documents.create({
     data: {
       name: "Untitled",
       created_at: new Date().toString(),
+      userId: 1,
+      parentId: parent,
+      type: type,
     },
   });
 }

@@ -50,10 +50,15 @@ function DocFiles() {
     fetchDocs();
   }, [refresh]);
 
-  const createDocHandler = async () => {
-    await addDocument();
+  const createFileHandler = async () => {
+    await addDocument("file");
     refreshPage((prev) => !prev);
   };
+
+  const createFolderHandler = async () => {
+    await addDocument("folder");
+    refreshPage((prev) => !prev);
+  } 
 
   const refreshList = () => {
     refreshPage((prev) => !prev);
@@ -71,9 +76,12 @@ function DocFiles() {
         <ul>
           {loading ? <p>Loading...</p> 
             : documents.map((doc, idx) => (
-              <File key={doc.id} id={doc.id} text={doc.name} idx={idx} deleteMode={deleteMode} refreshList={refreshList}/>
+              <File key={doc.id} id={doc.id} text={doc.name} idx={idx} deleteMode={deleteMode} refreshList={refreshList} type={doc.type} />
           ))}
-          <button className="p-2" onClick={createDocHandler}>Add Item</button>
+          <div className="flex flex-row">
+            <button className="p-2" onClick={createFileHandler}>Add Item</button>
+            <button className="p-2" onClick={createFolderHandler}>Add Folder</button>
+          </div>
         </ul>
       </div>
     </div>

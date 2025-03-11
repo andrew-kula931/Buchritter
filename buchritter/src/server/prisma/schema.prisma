@@ -9,6 +9,9 @@ datasource db {
 
 model Documents {
   id         Int     @id @default(autoincrement())
+  userId     Int
+  parentId   Int?
+  type       String
   name       String
   created_at String
   updated_at String?
