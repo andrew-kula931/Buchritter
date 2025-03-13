@@ -1,6 +1,13 @@
 import { useState, useRef, useEffect } from "react";
-import { getDocuments, addDocument, deleteDocument } from '../server/api/requests';
+import { deleteDocument, updateName } from '../server/api/requests';
 import { FiChevronDown } from "react-icons/fi";
+
+/*
+
+  TODO:
+    Differientiate a folder deletion from a file deletion
+
+*/
 
 export default function File({ id, text, idx, deleteMode, refreshList, type } : {id: number, text:string, idx:number, deleteMode:boolean, 
     refreshList: () => void, type: "file" | "folder" }) {
@@ -9,6 +16,9 @@ export default function File({ id, text, idx, deleteMode, refreshList, type } : 
 
   const [isModalOpen, renderModal] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [folderText, setFolderText] = useState(text);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
   
   const openModal = () => renderModal(true);
   const closeModal = () => renderModal(false);
@@ -25,8 +35,23 @@ export default function File({ id, text, idx, deleteMode, refreshList, type } : 
     }
   }
 
-  const handleFileClick = () => {
+  const handleFolderClick = () => {
     setIsOpen(!isOpen);
+  }
+
+  const handleDoubleClick = (event: React.MouseEvent) => {
+    event.stopPropagation();
+    setIsEditing(true);
+    setTimeout(() => inputRef.current?.focus(), 0);
+  }
+
+  const handleBlur = async () => {
+    setIsEditing(false);
+    updateName(id, folderText);
+  }
+
+  const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setFolderText(event.target.value);
   }
 
   const AlertModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) => {
@@ -79,7 +104,7 @@ export default function File({ id, text, idx, deleteMode, refreshList, type } : 
   (type === "file") ? 
 
   // File
-  <li className="p-0.5">
+  <ul className="p-0.5">
     {(!deleteMode) ?
       <div key={"normal"} className={`p-2 ${color} hover:bg-gray-500`} onClick={handleClick}>
         <a href={`/document_page?id=${id}`} ref={linkRef} style={{ display: 'none'}}>To Doc</a>
@@ -92,13 +117,29 @@ export default function File({ id, text, idx, deleteMode, refreshList, type } : 
         <AlertModal isOpen={isModalOpen} onClose={closeModal} />
       </div>
     }
-  </li> :
+  </ul> :
 
   // Folder 
-  <li className="p-0.5">
+  <ul className="p-0.5">
     {(!deleteMode) ?
-      <div key={"normal"} className={`p-2 ${color} hover:bg-gray-500 flex flex-row cursor-pointer`} onClick={handleFileClick}>
-        <div className="pr-1" >{text}</div>
+      <div className={`p-2 ${color} hover:bg-gray-500 flex flex-row cursor-pointer`} 
+        key={"normal"} 
+        onClick={handleFolderClick}>
+        <div onClick={!isEditing ? handleFolderClick : undefined} onDoubleClick={handleDoubleClick}>
+          {!isEditing ? (
+            <div className="pr-1" >{folderText}</div>
+          ): (
+            <textarea 
+              ref={inputRef}
+              className="rounded px-1"
+              value={folderText}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              rows={1}
+              autoFocus
+            />
+          )}
+        </div>
         <FiChevronDown className={`mt-1 transition-transform duration-200 ${isOpen ? "rotate-0" : "rotate-90"}`} />
       </div> :
       <div>
@@ -108,6 +149,6 @@ export default function File({ id, text, idx, deleteMode, refreshList, type } : 
         <AlertModal isOpen={isModalOpen} onClose={closeModal} />
       </div>
     }
-  </li>
+  </ul>
   );
 }

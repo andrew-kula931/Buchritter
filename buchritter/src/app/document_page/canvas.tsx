@@ -47,9 +47,9 @@ declare module 'slate' {
  * State refers to the object containing all configurable values:
  * @param - Bold, Italic, Underline, Bulleted List, Numbered List, Code
  */
-export function RichTextEditor({ updateState, state, updateVisualState, visualState, docId }:
-   { updateState: (key: any, value: boolean | string) => void; state: EditorState;
-     updateVisualState: (key: any, value: boolean | string) => void; visualState: EditorState; docId: number }) {
+export function RichTextEditor({ state, updateVisualState, visualState, docId }:
+   { state: EditorState; updateVisualState: (key: any, value: boolean | string) => void; 
+    visualState: EditorState; docId: number }) {
 
   // Page setup
   const [doc, updateDoc] = useState<Document | null>(null);

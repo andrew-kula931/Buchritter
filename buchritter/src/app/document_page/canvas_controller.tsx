@@ -70,7 +70,7 @@ export default function CanvasController() {
   return (
     <div>
       <ToolBar updateState={updateState} state={state} updateVisualState={updateVisualState} visualState={visualState}/>
-      <RichTextEditor updateState={updateState} state={state} updateVisualState={updateVisualState} visualState={visualState} docId={Number(docId)}/>
+      <RichTextEditor state={state} updateVisualState={updateVisualState} visualState={visualState} docId={Number(docId)}/>
     </div>
   );
 }
