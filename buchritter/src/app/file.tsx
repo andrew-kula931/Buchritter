@@ -1,16 +1,22 @@
 import { useState, useRef, useEffect } from "react";
-import { deleteDocument, updateName } from '../server/api/requests';
+import { deleteDocument, updateName, deleteFolder } from '../server/api/requests';
 import { FiChevronDown } from "react-icons/fi";
 
-/*
-
-  TODO:
-    Differientiate a folder deletion from a file deletion
-
-*/
-
-export default function File({ id, text, idx, deleteMode, refreshList, type } : {id: number, text:string, idx:number, deleteMode:boolean, 
-    refreshList: () => void, type: "file" | "folder" }) {
+/**
+ * Functions as either a 'file' or a 'folder'. Clicking a file sends the user to the text editor page while
+ * clicking the folder opens any content within. Both can be moved by dragging and dropping onto a valid location.
+ */
+export default function File({ id, text, idx, deleteMode, refreshList, type, updateDragged, updateDropped, showRoot } : {
+    id: number, 
+    text:string, 
+    idx:number, 
+    deleteMode:boolean, 
+    refreshList: () => void, 
+    type: "file" | "folder",
+    updateDragged: (id: number) => void, 
+    updateDropped: (id: number) => void,
+    showRoot: () => void }) 
+  {
   const color = (idx % 2 === 0) ? "bg-gray-700" : "bg-gray-600";
   const linkRef = useRef<HTMLAnchorElement>(null);
 
@@ -23,8 +29,14 @@ export default function File({ id, text, idx, deleteMode, refreshList, type } : 
   const openModal = () => renderModal(true);
   const closeModal = () => renderModal(false);
 
-  const confirmDelete = async () => {
-    await deleteDocument(id);
+  const confirmFileDelete = async () => {
+    deleteDocument(id);
+    renderModal(false);
+    refreshList();
+  }
+
+  const confirmFolderDelete = async () => {
+    deleteFolder(id);
     renderModal(false);
     refreshList();
   }
@@ -39,10 +51,16 @@ export default function File({ id, text, idx, deleteMode, refreshList, type } : 
     setIsOpen(!isOpen);
   }
 
+  // Allows for folder editing
   const handleDoubleClick = (event: React.MouseEvent) => {
     event.stopPropagation();
     setIsEditing(true);
     setTimeout(() => inputRef.current?.focus(), 0);
+  }
+
+  // Updates folder text
+  const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setFolderText(event.target.value);
   }
 
   const handleBlur = async () => {
@@ -50,11 +68,10 @@ export default function File({ id, text, idx, deleteMode, refreshList, type } : 
     updateName(id, folderText);
   }
 
-  const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setFolderText(event.target.value);
-  }
-
-  const AlertModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) => {
+  /**
+   * A popup menu to confirm the deletion of a file or folder.
+   */
+  const AlertModal = ({ isOpen, onClose, isFolder }: { isOpen: boolean, onClose: () => void, isFolder: boolean }) => {
     useEffect(() => {
       const handleOutsideClick = (event: MouseEvent) => {
         if (event.target instanceof Node && !(event.target as Element).closest('.modal-content')) {
@@ -89,7 +106,7 @@ export default function File({ id, text, idx, deleteMode, refreshList, type } : 
             </button>
             <button
               className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
-              onClick={confirmDelete}
+              onClick={(isFolder) ? confirmFolderDelete : confirmFileDelete}
             >
               Delete
             </button>
@@ -106,7 +123,14 @@ export default function File({ id, text, idx, deleteMode, refreshList, type } : 
   // File
   <ul className="p-0.5">
     {(!deleteMode) ?
-      <div key={"normal"} className={`p-2 ${color} hover:bg-gray-500`} onClick={handleClick}>
+      <div key={"normal"} 
+        className={`p-2 ${color} 
+        hover:bg-gray-500`} 
+        onClick={handleClick} 
+        draggable={true}
+        onDrag={showRoot}
+        onDragEnd={() => updateDragged(id)}
+        >
         <a href={`/document_page?id=${id}`} ref={linkRef} style={{ display: 'none'}}>To Doc</a>
         {text}
       </div> :
@@ -114,7 +138,7 @@ export default function File({ id, text, idx, deleteMode, refreshList, type } : 
         <div key={"pulsing"} className={`p-2 bg-slate-500 hover:bg-gray-500 animate-pulse`} onClick={openModal}>
           {text}
         </div> 
-        <AlertModal isOpen={isModalOpen} onClose={closeModal} />
+        <AlertModal isOpen={isModalOpen} onClose={closeModal} isFolder={false} />
       </div>
     }
   </ul> :
@@ -124,7 +148,13 @@ export default function File({ id, text, idx, deleteMode, refreshList, type } : 
     {(!deleteMode) ?
       <div className={`p-2 ${color} hover:bg-gray-500 flex flex-row cursor-pointer`} 
         key={"normal"} 
-        onClick={handleFolderClick}>
+        onClick={handleFolderClick}
+        draggable={true} 
+        onDragOver={e => { e.preventDefault() }}
+        onDrag={showRoot}
+        onDragEnd={() => updateDragged(id)}
+        onDrop={() => { updateDropped(id) }}
+        >
         <div onClick={!isEditing ? handleFolderClick : undefined} onDoubleClick={handleDoubleClick}>
           {!isEditing ? (
             <div className="pr-1" >{folderText}</div>
@@ -146,7 +176,7 @@ export default function File({ id, text, idx, deleteMode, refreshList, type } : 
         <div key={"pulsing"} className={`p-2 bg-slate-500 hover:bg-gray-500 animate-pulse`} onClick={openModal}>
           {text}
         </div> 
-        <AlertModal isOpen={isModalOpen} onClose={closeModal} />
+        <AlertModal isOpen={isModalOpen} onClose={closeModal} isFolder={true} />
       </div>
     }
   </ul>

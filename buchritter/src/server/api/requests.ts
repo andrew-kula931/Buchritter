@@ -4,8 +4,6 @@ import { Prisma, PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-// Only finds a single document with no filters
-// Delete or alter
 export async function getDoc(id: number) {
   const doc = await prisma.documents.findFirst({
     where: {
@@ -20,7 +18,7 @@ export async function updateDocument(
   id: number,
   bodyText: Prisma.InputJsonValue | typeof Prisma.JsonNull
 ) {
-  const doc = await prisma.documents.update({
+  await prisma.documents.update({
     where: {
       id: id,
     },
@@ -32,7 +30,7 @@ export async function updateDocument(
 }
 
 export async function updateName(id: number, nameText: string) {
-  const doc = await prisma.documents.update({
+  await prisma.documents.update({
     where: {
       id: id,
     },
@@ -49,7 +47,7 @@ export async function getDocuments() {
 }
 
 export async function addDocument(type: "file" | "folder", parent?: number) {
-  const newDoc = await prisma.documents.create({
+  await prisma.documents.create({
     data: {
       name: "Untitled",
       created_at: new Date().toString(),
@@ -61,9 +59,57 @@ export async function addDocument(type: "file" | "folder", parent?: number) {
 }
 
 export async function deleteDocument(id: number) {
-  const deleteDoc = await prisma.documents.delete({
+  await prisma.documents.delete({
     where: {
       id: id,
+    },
+  });
+}
+
+export async function deleteFolder(id: number) {
+  const newParentId = await prisma.documents.findFirst({
+    where: {
+      id: id,
+    },
+    select: {
+      parentId: true,
+    },
+  });
+
+  await prisma.documents.updateMany({
+    where: {
+      parentId: id,
+    },
+    data: {
+      parentId: newParentId?.parentId,
+    },
+  });
+
+  await prisma.documents.delete({
+    where: {
+      id: id,
+    },
+  });
+}
+
+export async function moveItem(itemId: number, parentId: number) {
+  await prisma.documents.update({
+    where: {
+      id: itemId,
+    },
+    data: {
+      parentId: parentId,
+    },
+  });
+}
+
+export async function moveToRoot(itemId: number) {
+  await prisma.documents.update({
+    where: {
+      id: itemId,
+    },
+    data: {
+      parentId: null,
     },
   });
 }

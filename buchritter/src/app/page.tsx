@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { getDocuments, addDocument, deleteDocument } from '../server/api/requests';
+import { getDocuments, addDocument, moveItem, moveToRoot } from '../server/api/requests';
 import { Trash, X } from 'lucide-react';
 import File from '@/app/file';
 
@@ -22,6 +22,12 @@ function TitleBar() {
   );
 }
 
+/*
+
+TODO:
+  Folders cap out at one level of nesting, need to have infinite levels of nesting
+
+*/
 
 function DocFiles() {
   const [documents, setDocs] = useState<any[]>([]);
@@ -29,6 +35,24 @@ function DocFiles() {
   const [refresh, refreshPage] = useState(false);
   const [deleteMode, setDeleteMode] = useState(false);
   const [openFolders, setOpenFolders] = useState<{ [key: number]: boolean }>({});
+  const dragged = useRef<number>(null);
+  const dropped = useRef<number>(null);
+  const sendRoot = useRef<boolean>(false);
+  const [root, showRoot] = useState(false);
+  
+  const moveFile = async () => {
+    if (dragged.current != null && dropped.current != null && dropped.current != dragged.current) {
+      await moveItem(dragged.current, dropped.current);
+      dragged.current = null;
+      dropped.current = null;
+      refreshList();
+    } else if (dragged.current != null && sendRoot) {
+      await moveToRoot(dragged.current);
+      dragged.current = null;
+      sendRoot.current = false;
+      refreshList();
+    }
+  }
 
   const toggleDeleteMode = () => {
     setDeleteMode(!deleteMode);
@@ -94,6 +118,12 @@ function DocFiles() {
                     deleteMode={deleteMode} 
                     refreshList={refreshList} 
                     type={doc.type} 
+                    updateDragged={(id: number) => { 
+                      dragged.current = id; 
+                      moveFile()
+                      showRoot(false); }}
+                    updateDropped={(id: number) => { dropped.current = id; moveFile() }}
+                    showRoot={() => showRoot(true)}
                   />
                 </div>
 
@@ -108,12 +138,27 @@ function DocFiles() {
                         deleteMode={deleteMode}
                         refreshList={refreshList}
                         type={child.type}
+                        updateDragged={(id: number) => { 
+                          dragged.current = id; 
+                          moveFile();
+                          showRoot(false); }}
+                        updateDropped={(id: number) => { dropped.current = id; moveFile() }}
+                        showRoot={() => showRoot(true)}
                       />
                     ))}
                   </ul>
                 )} 
               </li>
           ))) }
+
+          {root && (
+            <div className="p-2 bg-gray-700" 
+              onDragOver={ e => e.preventDefault() }
+              onDrop={() => sendRoot.current = true}>
+              Move to Root
+            </div>
+          )}
+
           <div className="flex flex-row">
             <button className="p-2" onClick={createFileHandler}>Add Item</button>
             <button className="p-2" onClick={createFolderHandler}>Add Folder</button>
