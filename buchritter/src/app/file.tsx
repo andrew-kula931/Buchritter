@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { deleteDocument, updateName, deleteFolder, getDocuments } from '../server/api/requests';
+import { deleteDocument, updateName, deleteFolder } from '../server/api/requests';
 import { FiChevronDown } from "react-icons/fi";
 
 /**

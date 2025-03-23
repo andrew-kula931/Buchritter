@@ -22,13 +22,6 @@ function TitleBar() {
   );
 }
 
-/*
-
-TODO:
-  Folders cap out at one level of nesting, need to have infinite levels of nesting
-
-*/
-
 function DocFiles() {
   const [documents, setDocs] = useState<any[]>([]);
   const [loading, displayLoading] = useState(true);
