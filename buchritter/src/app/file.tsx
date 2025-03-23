@@ -1,12 +1,12 @@
 import { useState, useRef, useEffect } from "react";
-import { deleteDocument, updateName, deleteFolder } from '../server/api/requests';
+import { deleteDocument, updateName, deleteFolder, getDocuments } from '../server/api/requests';
 import { FiChevronDown } from "react-icons/fi";
 
 /**
  * Functions as either a 'file' or a 'folder'. Clicking a file sends the user to the text editor page while
  * clicking the folder opens any content within. Both can be moved by dragging and dropping onto a valid location.
  */
-export default function File({ id, text, idx, deleteMode, refreshList, type, updateDragged, updateDropped, showRoot } : {
+export default function File({ id, text, idx, deleteMode, refreshList, type, updateDragged, updateDropped, showRoot, documents } : {
     id: number, 
     text:string, 
     idx:number, 
@@ -15,7 +15,8 @@ export default function File({ id, text, idx, deleteMode, refreshList, type, upd
     type: "file" | "folder",
     updateDragged: (id: number) => void, 
     updateDropped: (id: number) => void,
-    showRoot: () => void }) 
+    showRoot: () => void,
+    documents: any} ) 
   {
   const color = (idx % 2 === 0) ? "bg-gray-700" : "bg-gray-600";
   const linkRef = useRef<HTMLAnchorElement>(null);
@@ -67,6 +68,10 @@ export default function File({ id, text, idx, deleteMode, refreshList, type, upd
     setIsEditing(false);
     updateName(id, folderText);
   }
+
+  const getChildItems = (parentId: number) => 
+    documents.filter((doc: any) => doc.parentId == parentId
+  );
 
   /**
    * A popup menu to confirm the deletion of a file or folder.
@@ -148,14 +153,14 @@ export default function File({ id, text, idx, deleteMode, refreshList, type, upd
     {(!deleteMode) ?
       <div className={`p-2 ${color} hover:bg-gray-500 flex flex-row cursor-pointer`} 
         key={"normal"} 
-        onClick={handleFolderClick}
+        onClick={() => {handleFolderClick()}}
         draggable={true} 
         onDragOver={e => { e.preventDefault() }}
         onDrag={showRoot}
         onDragEnd={() => updateDragged(id)}
         onDrop={() => { updateDropped(id) }}
         >
-        <div onClick={!isEditing ? handleFolderClick : undefined} onDoubleClick={handleDoubleClick}>
+        <div onClick={!isEditing ? () => handleFolderClick() : undefined} onDoubleClick={handleDoubleClick}>
           {!isEditing ? (
             <div className="pr-1" >{folderText}</div>
           ): (
@@ -179,6 +184,25 @@ export default function File({ id, text, idx, deleteMode, refreshList, type, upd
         <AlertModal isOpen={isModalOpen} onClose={closeModal} isFolder={true} />
       </div>
     }
+    {isOpen && (
+      <li className="ml-4 border-l border-gray-500 pl-4">
+        {getChildItems(id).map((child: any, childIdx: number) => (
+          <File 
+            key={child.id}
+            id={child.id}
+            text={child.name}
+            idx={childIdx}
+            deleteMode={deleteMode}
+            refreshList={refreshList}
+            type={child.type}
+            updateDragged={updateDragged}
+            updateDropped={updateDropped}
+            showRoot={showRoot}
+            documents={documents}
+          />
+        ))}
+      </li>
+    )}
   </ul>
   );
 }

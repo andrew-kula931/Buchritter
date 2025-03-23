@@ -58,13 +58,8 @@ function DocFiles() {
     setDeleteMode(!deleteMode);
   }
 
-  const toggleFolder = (folderId: number) => {
-    setOpenFolders((prev) => ({ ...prev, [folderId]: !prev[folderId] }));
-  }
 
   const getRootItems = () => documents.filter((doc) => !doc.parentId);
-
-  const getChildItems = (parentId: number) => documents.filter((doc) => doc.parentId == parentId);
 
   useEffect(() => {
     const fetchDocs = async () => {
@@ -109,7 +104,7 @@ function DocFiles() {
           {loading ? <p>Loading...</p> 
             : ( getRootItems().map((doc, idx) => (
               <li key={doc.id}>
-                <div onClick={() => doc.type === "folder" && toggleFolder(doc.id)}>
+                <div>
                   <File 
                     key={doc.id} 
                     id={doc.id} 
@@ -124,30 +119,9 @@ function DocFiles() {
                       showRoot(false); }}
                     updateDropped={(id: number) => { dropped.current = id; moveFile() }}
                     showRoot={() => showRoot(true)}
+                    documents={documents}
                   />
                 </div>
-
-                {doc.type === "folder" && openFolders[doc.id] && (
-                  <ul className="ml-4 border-l border-gray-500 pl-4">
-                    {getChildItems(doc.id).map((child, childIdx) => (
-                      <File 
-                        key={child.id}
-                        id={child.id}
-                        text={child.name}
-                        idx={childIdx}
-                        deleteMode={deleteMode}
-                        refreshList={refreshList}
-                        type={child.type}
-                        updateDragged={(id: number) => { 
-                          dragged.current = id; 
-                          moveFile();
-                          showRoot(false); }}
-                        updateDropped={(id: number) => { dropped.current = id; moveFile() }}
-                        showRoot={() => showRoot(true)}
-                      />
-                    ))}
-                  </ul>
-                )} 
               </li>
           ))) }
 
