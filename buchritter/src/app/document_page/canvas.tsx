@@ -25,7 +25,7 @@ export const docStyle = {
 
 //Typescript interfacing
 type CustomElement = { type: 'paragraph' | 'code' | 'bulleted-list' | 'numbered-list'; children: CustomText[] };
-type CustomText = { text: string; bold?: boolean; italic?: boolean; underline?: boolean; }
+type CustomText = { text: string; bold?: boolean; italic?: boolean; underline?: boolean; lineThrough?: boolean}
 type Document = {
   id: number;
   name: string;
@@ -113,6 +113,10 @@ export function RichTextEditor({ state, updateVisualState, visualState, docId }:
   }, [state.underline]);
 
   useEffect(() => {
+    CustomEditor.toggleLineThrough(editor);
+  }, [state.lineThrough]);
+
+  useEffect(() => {
     CustomEditor.toggleBulleted(editor);
   }, [state.bulleted_list]);
 
@@ -124,7 +128,7 @@ export function RichTextEditor({ state, updateVisualState, visualState, docId }:
     CustomEditor.toggleCode(editor);
   }, [state.code]);
 
-  // Listener to update state on click
+  // Listener to update format state on click
   const handleSelection = () => {
     if (!editor.selection) return;
 
@@ -165,6 +169,9 @@ export function RichTextEditor({ state, updateVisualState, visualState, docId }:
       if (node.children?.some(child => (child as CustomText).underline)) {
         updateVisualState('underline', true);
       }
+      if (node.children?.some(child => (child as CustomText).lineThrough)) {
+        updateVisualState('lineThrough', true);
+      };
     } 
   };
 
@@ -204,7 +211,9 @@ export function RichTextEditor({ state, updateVisualState, visualState, docId }:
         style={{ 
           fontWeight: props.leaf.bold ? 'bold' : 'normal',
           fontStyle: props.leaf.italic ? 'italic' : 'normal',
-          textDecoration: props.leaf.underline ? 'underline' : 'none'
+          textDecoration: [ props.leaf.underline ? 'underline' : '', 
+            props.leaf.lineThrough ? 'line-through' : '' ]
+            .filter(Boolean).join(" ") || 'none',
         }}
       >
         {props.children}
@@ -273,6 +282,20 @@ export function RichTextEditor({ state, updateVisualState, visualState, docId }:
         Editor.removeMark(editor, 'underline');
       } else {
         Editor.addMark(editor, 'underline', true);
+      }
+    },
+
+    isLineThroughActive(editor: Editor) {
+      const marks: any = Editor.marks(editor);
+      return marks ? marks.lineThrough === true : false;
+    },
+
+    toggleLineThrough(editor: Editor) {
+      const isActive = CustomEditor.isLineThroughActive(editor);
+      if (isActive) {
+        Editor.removeMark(editor, 'lineThrough');
+      } else {
+        Editor.addMark(editor, 'lineThrough', true);
       }
     },
 
@@ -354,7 +377,7 @@ export function RichTextEditor({ state, updateVisualState, visualState, docId }:
           renderElement={renderElement}
           renderLeaf={renderLeaf}
           spellCheck
-          className="border p-8 min-h-[1123px] w-[784px]" 
+          className="border p-8 h-[1123px] w-[784px]" 
           autoFocus
           onSelect={() => handleSelection()}
           onKeyDown={event => {
@@ -388,6 +411,13 @@ export function RichTextEditor({ state, updateVisualState, visualState, docId }:
                 event.preventDefault();
                 CustomEditor.toggleUnderline(editor);
                 visualState.underline = !visualState.underline;
+                break;
+              }
+
+              case '5': {
+                event.preventDefault();
+                CustomEditor.toggleLineThrough(editor);
+                visualState.lineThrough = !visualState.lineThrough;
                 break;
               }
 
