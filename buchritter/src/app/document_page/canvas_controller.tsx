@@ -30,7 +30,7 @@ export interface EditorState {
   bulleted_list: boolean;
   numbered_list: boolean;
   code: boolean;
-  align: "left" | "center" | "right" | "justify";
+  align: "left" | "center" | "right";
 }
 
 export default function CanvasController() {

@@ -2,7 +2,7 @@ import { EditorState } from "./canvas_controller";
 import { IconButton } from 'rsuite';
 import { FaBold, FaCode } from 'react-icons/fa6';
 import { FiItalic, FiUnderline } from 'react-icons/fi';
-import { MdFormatListBulleted, MdStrikethroughS } from 'react-icons/md';
+import { MdFormatListBulleted, MdStrikethroughS, MdFormatAlignLeft, MdFormatAlignCenter, MdFormatAlignRight } from 'react-icons/md';
 import { TbListNumbers } from 'react-icons/tb';
 
 /**
@@ -49,6 +49,21 @@ export function ToolBar({ updateState, state, updateVisualState, visualState }:
         className={`mr-2 pr-1 pl-1 rounded hover:bg-gray-500 ${visualState.code ? "bg-gray-600" : "bg-[rgb(50,50,50)]" }`} 
         onClick={() => {updateState("code", !state.code); visualState.code = !visualState.code}}
         icon={<FaCode />}>
+      </IconButton>
+      <IconButton 
+        className={`mr-2 pr-1 pl-1 rounded hover:bg-gray-500 ${visualState.align == "left" ? "bg-gray-600" : "bg-[rgb(50,50,50)]" }`} 
+        onClick={() => {updateState("align", "left"); visualState.align = "left"}}
+        icon={<MdFormatAlignLeft />}>
+      </IconButton>
+      <IconButton 
+        className={`mr-2 pr-1 pl-1 rounded hover:bg-gray-500 ${visualState.align == "center" ? "bg-gray-600" : "bg-[rgb(50,50,50)]" }`} 
+        onClick={() => {updateState("align", "center"); visualState.align = "center"}}
+        icon={<MdFormatAlignCenter />}>
+      </IconButton>
+      <IconButton 
+        className={`mr-2 pr-1 pl-1 rounded hover:bg-gray-500 ${visualState.align == "right" ? "bg-gray-600" : "bg-[rgb(50,50,50)]" }`} 
+        onClick={() => {updateState("align", "right"); visualState.align = "right"}}
+        icon={<MdFormatAlignRight />}>
       </IconButton>
     </div>
   );

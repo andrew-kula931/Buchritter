@@ -24,7 +24,7 @@ export const docStyle = {
 };
 
 //Typescript interfacing
-type CustomElement = { type: 'paragraph' | 'code' | 'bulleted-list' | 'numbered-list'; children: CustomText[] };
+type CustomElement = { type: 'paragraph' | 'code' | 'bulleted-list' | 'numbered-list'; align?: 'left' | 'center' | 'right'; children: CustomText[] };
 type CustomText = { text: string; bold?: boolean; italic?: boolean; underline?: boolean; lineThrough?: boolean}
 type Document = {
   id: number;
@@ -128,7 +128,14 @@ export function RichTextEditor({ state, updateVisualState, visualState, docId }:
     CustomEditor.toggleCode(editor);
   }, [state.code]);
 
-  // Listener to update format state on click
+  useEffect(() => {
+    CustomEditor.changeAlignment(editor, state.align);
+  }, [state.align]);
+
+  /**
+   * Listener to update the toolbar state on user click.
+   * @returns void
+   */
   const handleSelection = () => {
     if (!editor.selection) return;
 
@@ -159,7 +166,9 @@ export function RichTextEditor({ state, updateVisualState, visualState, docId }:
       }
 
       updateVisualState(type, true);
-      
+
+      updateVisualState("align", (node as CustomElement).align ?? "left");
+
       if (node.children?.some(child => (child as CustomText).bold)) {
         updateVisualState('bold', true);
       }
@@ -177,28 +186,44 @@ export function RichTextEditor({ state, updateVisualState, visualState, docId }:
 
   // Custom Elements for the editor
   const DefaultElement = (props: RenderElementProps) => {
-    return <p {...props.attributes}>{props.children}</p>
+    const style = {
+      textAlign: props.element.align || "left",
+    };
+
+    return <p {...props.attributes} style={style} >{props.children}</p>
   };
 
   const CodeElement = (props: RenderElementProps) => {
+    const style = {
+      textAlign: props.element.align || "left",
+    };
+
     return (
-      <pre {...props.attributes}>
+      <pre {...props.attributes} style={style} >
         <code>{props.children}</code>
       </pre>
     )
   };
 
   const BulletedList = (props: RenderElementProps) => {
+    const style = {
+      textAlign: props.element.align || "left",
+    };
+    
     return (
-      <ul {...props.attributes} className="ml-6 list-disc">
+      <ul {...props.attributes} style={style} className="ml-6 list-disc list-inside">
         <li>{props.children}</li>
       </ul>
     )
   };
 
   const NumberedList = (props: RenderElementProps) => {
+    const style = {
+      textAlign: props.element.align || "left",
+    };
+
     return (
-      <ol {...props.attributes} className="ml-6 list-decimal">
+      <ol {...props.attributes} style={style} className="ml-6 list-decimal list-inside">
         <li>{props.children}</li>
       </ol>
     )
@@ -226,7 +251,7 @@ export function RichTextEditor({ state, updateVisualState, visualState, docId }:
   const renderElement = useCallback((props: RenderElementProps) => {
     switch (props.element.type) {
       case 'code':
-        return <CodeElement {...props} />
+        return <CodeElement {...props}/>
       case 'bulleted-list':
         return <BulletedList {...props} />
       case 'numbered-list':
@@ -241,7 +266,11 @@ export function RichTextEditor({ state, updateVisualState, visualState, docId }:
   }, []);
 
 
-  // This is where all of the editor functions are handled
+  /**
+   * Contains unique editor logic which handles text modifications.
+   * Functions primarily as a control flow as methods are defined rather
+   * than element/leaf definitions.
+   */
   const CustomEditor = {
     isBoldActive(editor: Editor) {
       const marks: any = Editor.marks(editor);
@@ -299,6 +328,14 @@ export function RichTextEditor({ state, updateVisualState, visualState, docId }:
       }
     },
 
+    changeAlignment(editor: Editor, alignment: "left" | "center" | "right") {
+      Transforms.setNodes(
+        editor,
+        { align: alignment },
+        { match: n => Element.isElement(n) && Editor.isBlock(editor, (n as CustomElement))}
+      )
+    },
+
     isCodeActive(editor: Editor) {
       const [match] = Editor.nodes(editor, {
         match: n => Element.isElement(n) && n.type === 'code',
@@ -309,6 +346,9 @@ export function RichTextEditor({ state, updateVisualState, visualState, docId }:
 
     toggleCode(editor: Editor) {
       const isActive = CustomEditor.isCodeActive(editor);
+
+      updateVisualState('numbered_list', false);
+      updateVisualState('bulleted_list', false);
 
       Transforms.setNodes(
         editor,
@@ -328,6 +368,9 @@ export function RichTextEditor({ state, updateVisualState, visualState, docId }:
     toggleBulleted(editor: Editor) {
       const isActive = CustomEditor.isBulletedActive(editor);
 
+      updateVisualState('numbered_list', false);
+      updateVisualState('code', false);
+
       Transforms.setNodes(
         editor,
         { type: isActive ? 'paragraph' : 'bulleted-list' },
@@ -345,6 +388,9 @@ export function RichTextEditor({ state, updateVisualState, visualState, docId }:
 
     toggleNumbered(editor: Editor) {
       const isActive = CustomEditor.isNumberedActive(editor);
+
+      updateVisualState('bulleted_list', false);
+      updateVisualState('code', false);
 
       Transforms.setNodes(
         editor,
