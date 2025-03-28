@@ -33,6 +33,11 @@ export interface EditorState {
   align: "left" | "center" | "right";
 }
 
+/**
+ * Controls passing state between the toolbar and the canvas. 
+ * 
+ * Requires an 'id' parameter in the page url to retrieve proper document information.
+ */
 export default function CanvasController() {
   const searchParams = useSearchParams();
   const docId = searchParams.get("id") ?? 0;
@@ -69,8 +74,12 @@ export default function CanvasController() {
 
   return (
     <div>
-      <ToolBar updateState={updateState} state={state} updateVisualState={updateVisualState} visualState={visualState}/>
-      <RichTextEditor state={state} updateVisualState={updateVisualState} visualState={visualState} docId={Number(docId)}/>
+      <div className="sticky top-0 z-10">
+        <ToolBar updateState={updateState} state={state} updateVisualState={updateVisualState} visualState={visualState}/>
+      </div>
+      <div className="overflow-auto overscroll-contain">
+        <RichTextEditor state={state} updateVisualState={updateVisualState} visualState={visualState} docId={Number(docId)}/>
+      </div>
     </div>
   );
 }

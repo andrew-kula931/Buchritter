@@ -4,6 +4,11 @@ import { useSearchParams } from "next/navigation";
 import { getDoc, updateName } from "@/server/api/requests";
 import { useEffect, useState, useRef } from "react";
 
+/**
+ * Title box that draws the name of the document from the searchParam 'id'. 
+ * 
+ * Can be edited and saves automatically.
+ */
 export default function DocTitle() {
   const searchParams = useSearchParams();
   const docId = searchParams.get("id") ?? 0;

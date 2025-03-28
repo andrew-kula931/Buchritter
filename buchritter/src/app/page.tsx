@@ -22,12 +22,15 @@ function TitleBar() {
   );
 }
 
+/**
+ * Menu that displays all documents in a vertical list.
+ * Folders can be expanded while Files redirect to editor.
+ */
 function DocFiles() {
   const [documents, setDocs] = useState<any[]>([]);
   const [loading, displayLoading] = useState(true);
   const [refresh, refreshPage] = useState(false);
   const [deleteMode, setDeleteMode] = useState(false);
-  const [openFolders, setOpenFolders] = useState<{ [key: number]: boolean }>({});
   const dragged = useRef<number>(null);
   const dropped = useRef<number>(null);
   const sendRoot = useRef<boolean>(false);

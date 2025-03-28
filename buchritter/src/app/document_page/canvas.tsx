@@ -8,7 +8,7 @@ import { EditorState } from './canvas_controller';
 import { getDoc, updateDocument } from '../../server/api/requests';
 import { JsonValue } from "@prisma/client/runtime/library";
 
-//Styling
+//Styling of the text area
 export const docStyle = {
   document: {
     width: "800px",
@@ -185,6 +185,7 @@ export function RichTextEditor({ state, updateVisualState, visualState, docId }:
   };
 
   // Custom Elements for the editor
+  // Defines html rendering properties and passes in styling as a param
   const DefaultElement = (props: RenderElementProps) => {
     const style = {
       textAlign: props.element.align || "left",
@@ -423,7 +424,7 @@ export function RichTextEditor({ state, updateVisualState, visualState, docId }:
           renderElement={renderElement}
           renderLeaf={renderLeaf}
           spellCheck
-          className="border p-8 h-[1123px] w-[784px]" 
+          className="border p-8 min-h-[1123px] w-[784px]" 
           autoFocus
           onSelect={() => handleSelection()}
           onKeyDown={event => {

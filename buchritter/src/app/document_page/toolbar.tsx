@@ -6,8 +6,8 @@ import { MdFormatListBulleted, MdStrikethroughS, MdFormatAlignLeft, MdFormatAlig
 import { TbListNumbers } from 'react-icons/tb';
 
 /**
- * Small Toolbar the wraps the width of the screen. Has toggleable buttons for bold, italic, underline, bulleted_list,
- * numbered_list, and code
+ * Small Toolbar the wraps the width of the screen. Has toggleable buttons for 
+ * bold, italic, underline, bulleted_list, numbered_list, and code
  */
 export function ToolBar({ updateState, state, updateVisualState, visualState }:
    { updateState: (key: any, value: boolean | string) => void; state: EditorState;
