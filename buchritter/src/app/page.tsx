@@ -54,7 +54,6 @@ function DocFiles() {
     setDeleteMode(!deleteMode);
   }
 
-
   const getRootItems = () => documents.filter((doc) => !doc.parentId);
 
   useEffect(() => {

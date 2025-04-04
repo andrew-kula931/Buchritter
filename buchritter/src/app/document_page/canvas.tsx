@@ -51,7 +51,7 @@ export function RichTextEditor({ state, updateVisualState, visualState, docId }:
    { state: EditorState; updateVisualState: (key: any, value: boolean | string) => void; 
     visualState: EditorState; docId: number }) {
 
-  // Page setup
+  // Page state variables and setup
   const [doc, updateDoc] = useState<Document | null>(null);
   const [value, setValue] = useState<Descendant[]>([
     { type: 'paragraph', children: [{ text: ''}]}
@@ -230,6 +230,9 @@ export function RichTextEditor({ state, updateVisualState, visualState, docId }:
     )
   };
 
+  // Leaves are the individual sections of styling within the editor.
+  // For example, two characters that are bold are a seperate leaf than the
+  // bold and italic character next to them.
   const Leaf = (props: any) => {
     return (
       <span
