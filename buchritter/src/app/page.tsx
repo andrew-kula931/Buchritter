@@ -6,9 +6,14 @@ import { Trash, X } from 'lucide-react';
 import File from '@/app/file';
 
 export default function Home() {
+  const linkRef = useRef<HTMLAnchorElement>(null);
+
   return (
     <>
       <TitleBar />
+      <div className="pt-2 pl-4">
+        <a href="/review_page" ref={linkRef} className="hover:text-gray-400">Book Reviews</a>
+      </div>
       <DocFiles />
     </>
   );
