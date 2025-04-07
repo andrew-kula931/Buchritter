@@ -14,10 +14,10 @@ export async function getDoc(id: number) {
   return doc;
 }
 
-// bodyText: Prisma.InputJsonValue | typeof Prisma.JsonNull
-// This notation was not an issue originally but with a prisma update, it
-// doesn't work anymore, take a look at this later
-export async function updateDocument(id: number, bodyText: any) {
+export async function updateDocument(
+  id: number,
+  bodyText: Prisma.InputJsonValue | typeof Prisma.JsonNull
+) {
   await prisma.documents.update({
     where: {
       id: id,

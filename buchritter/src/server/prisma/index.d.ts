@@ -18,6 +18,16 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
  * 
  */
 export type Documents = $Result.DefaultSelection<Prisma.$DocumentsPayload>
+/**
+ * Model Reviews
+ * 
+ */
+export type Reviews = $Result.DefaultSelection<Prisma.$ReviewsPayload>
+/**
+ * Model Configurations
+ * 
+ */
+export type Configurations = $Result.DefaultSelection<Prisma.$ConfigurationsPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -153,6 +163,26 @@ export class PrismaClient<
     * ```
     */
   get documents(): Prisma.DocumentsDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.reviews`: Exposes CRUD operations for the **Reviews** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Reviews
+    * const reviews = await prisma.reviews.findMany()
+    * ```
+    */
+  get reviews(): Prisma.ReviewsDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.configurations`: Exposes CRUD operations for the **Configurations** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Configurations
+    * const configurations = await prisma.configurations.findMany()
+    * ```
+    */
+  get configurations(): Prisma.ConfigurationsDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -593,7 +623,9 @@ export namespace Prisma {
 
 
   export const ModelName: {
-    Documents: 'Documents'
+    Documents: 'Documents',
+    Reviews: 'Reviews',
+    Configurations: 'Configurations'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -612,7 +644,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "documents"
+      modelProps: "documents" | "reviews" | "configurations"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -687,6 +719,154 @@ export namespace Prisma {
           count: {
             args: Prisma.DocumentsCountArgs<ExtArgs>
             result: $Utils.Optional<DocumentsCountAggregateOutputType> | number
+          }
+        }
+      }
+      Reviews: {
+        payload: Prisma.$ReviewsPayload<ExtArgs>
+        fields: Prisma.ReviewsFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ReviewsFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReviewsPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ReviewsFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReviewsPayload>
+          }
+          findFirst: {
+            args: Prisma.ReviewsFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReviewsPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ReviewsFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReviewsPayload>
+          }
+          findMany: {
+            args: Prisma.ReviewsFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReviewsPayload>[]
+          }
+          create: {
+            args: Prisma.ReviewsCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReviewsPayload>
+          }
+          createMany: {
+            args: Prisma.ReviewsCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ReviewsCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReviewsPayload>[]
+          }
+          delete: {
+            args: Prisma.ReviewsDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReviewsPayload>
+          }
+          update: {
+            args: Prisma.ReviewsUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReviewsPayload>
+          }
+          deleteMany: {
+            args: Prisma.ReviewsDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ReviewsUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ReviewsUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReviewsPayload>[]
+          }
+          upsert: {
+            args: Prisma.ReviewsUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReviewsPayload>
+          }
+          aggregate: {
+            args: Prisma.ReviewsAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateReviews>
+          }
+          groupBy: {
+            args: Prisma.ReviewsGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ReviewsGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ReviewsCountArgs<ExtArgs>
+            result: $Utils.Optional<ReviewsCountAggregateOutputType> | number
+          }
+        }
+      }
+      Configurations: {
+        payload: Prisma.$ConfigurationsPayload<ExtArgs>
+        fields: Prisma.ConfigurationsFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ConfigurationsFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ConfigurationsPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ConfigurationsFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ConfigurationsPayload>
+          }
+          findFirst: {
+            args: Prisma.ConfigurationsFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ConfigurationsPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ConfigurationsFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ConfigurationsPayload>
+          }
+          findMany: {
+            args: Prisma.ConfigurationsFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ConfigurationsPayload>[]
+          }
+          create: {
+            args: Prisma.ConfigurationsCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ConfigurationsPayload>
+          }
+          createMany: {
+            args: Prisma.ConfigurationsCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ConfigurationsCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ConfigurationsPayload>[]
+          }
+          delete: {
+            args: Prisma.ConfigurationsDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ConfigurationsPayload>
+          }
+          update: {
+            args: Prisma.ConfigurationsUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ConfigurationsPayload>
+          }
+          deleteMany: {
+            args: Prisma.ConfigurationsDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ConfigurationsUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ConfigurationsUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ConfigurationsPayload>[]
+          }
+          upsert: {
+            args: Prisma.ConfigurationsUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ConfigurationsPayload>
+          }
+          aggregate: {
+            args: Prisma.ConfigurationsAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateConfigurations>
+          }
+          groupBy: {
+            args: Prisma.ConfigurationsGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ConfigurationsGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ConfigurationsCountArgs<ExtArgs>
+            result: $Utils.Optional<ConfigurationsCountAggregateOutputType> | number
           }
         }
       }
@@ -775,6 +955,8 @@ export namespace Prisma {
   }
   export type GlobalOmitConfig = {
     documents?: DocumentsOmit
+    reviews?: ReviewsOmit
+    configurations?: ConfigurationsOmit
   }
 
   /* Types for Logging */
@@ -863,6 +1045,67 @@ export namespace Prisma {
    * Count Types
    */
 
+
+  /**
+   * Count Type ReviewsCountOutputType
+   */
+
+  export type ReviewsCountOutputType = {
+    tags: number
+  }
+
+  export type ReviewsCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tags?: boolean | ReviewsCountOutputTypeCountTagsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * ReviewsCountOutputType without action
+   */
+  export type ReviewsCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReviewsCountOutputType
+     */
+    select?: ReviewsCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ReviewsCountOutputType without action
+   */
+  export type ReviewsCountOutputTypeCountTagsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ConfigurationsWhereInput
+  }
+
+
+  /**
+   * Count Type ConfigurationsCountOutputType
+   */
+
+  export type ConfigurationsCountOutputType = {
+    reviews: number
+  }
+
+  export type ConfigurationsCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    reviews?: boolean | ConfigurationsCountOutputTypeCountReviewsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * ConfigurationsCountOutputType without action
+   */
+  export type ConfigurationsCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ConfigurationsCountOutputType
+     */
+    select?: ConfigurationsCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ConfigurationsCountOutputType without action
+   */
+  export type ConfigurationsCountOutputTypeCountReviewsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ReviewsWhereInput
+  }
 
 
   /**
@@ -1940,6 +2183,2227 @@ export namespace Prisma {
 
 
   /**
+   * Model Reviews
+   */
+
+  export type AggregateReviews = {
+    _count: ReviewsCountAggregateOutputType | null
+    _avg: ReviewsAvgAggregateOutputType | null
+    _sum: ReviewsSumAggregateOutputType | null
+    _min: ReviewsMinAggregateOutputType | null
+    _max: ReviewsMaxAggregateOutputType | null
+  }
+
+  export type ReviewsAvgAggregateOutputType = {
+    id: number | null
+    rating: number | null
+  }
+
+  export type ReviewsSumAggregateOutputType = {
+    id: number | null
+    rating: number | null
+  }
+
+  export type ReviewsMinAggregateOutputType = {
+    id: number | null
+    title: string | null
+    summary: string | null
+    rating: number | null
+    image_path: string | null
+    review: string | null
+    link: string | null
+  }
+
+  export type ReviewsMaxAggregateOutputType = {
+    id: number | null
+    title: string | null
+    summary: string | null
+    rating: number | null
+    image_path: string | null
+    review: string | null
+    link: string | null
+  }
+
+  export type ReviewsCountAggregateOutputType = {
+    id: number
+    title: number
+    summary: number
+    rating: number
+    image_path: number
+    review: number
+    link: number
+    _all: number
+  }
+
+
+  export type ReviewsAvgAggregateInputType = {
+    id?: true
+    rating?: true
+  }
+
+  export type ReviewsSumAggregateInputType = {
+    id?: true
+    rating?: true
+  }
+
+  export type ReviewsMinAggregateInputType = {
+    id?: true
+    title?: true
+    summary?: true
+    rating?: true
+    image_path?: true
+    review?: true
+    link?: true
+  }
+
+  export type ReviewsMaxAggregateInputType = {
+    id?: true
+    title?: true
+    summary?: true
+    rating?: true
+    image_path?: true
+    review?: true
+    link?: true
+  }
+
+  export type ReviewsCountAggregateInputType = {
+    id?: true
+    title?: true
+    summary?: true
+    rating?: true
+    image_path?: true
+    review?: true
+    link?: true
+    _all?: true
+  }
+
+  export type ReviewsAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Reviews to aggregate.
+     */
+    where?: ReviewsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Reviews to fetch.
+     */
+    orderBy?: ReviewsOrderByWithRelationInput | ReviewsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ReviewsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Reviews from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Reviews.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Reviews
+    **/
+    _count?: true | ReviewsCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ReviewsAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ReviewsSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ReviewsMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ReviewsMaxAggregateInputType
+  }
+
+  export type GetReviewsAggregateType<T extends ReviewsAggregateArgs> = {
+        [P in keyof T & keyof AggregateReviews]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateReviews[P]>
+      : GetScalarType<T[P], AggregateReviews[P]>
+  }
+
+
+
+
+  export type ReviewsGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ReviewsWhereInput
+    orderBy?: ReviewsOrderByWithAggregationInput | ReviewsOrderByWithAggregationInput[]
+    by: ReviewsScalarFieldEnum[] | ReviewsScalarFieldEnum
+    having?: ReviewsScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ReviewsCountAggregateInputType | true
+    _avg?: ReviewsAvgAggregateInputType
+    _sum?: ReviewsSumAggregateInputType
+    _min?: ReviewsMinAggregateInputType
+    _max?: ReviewsMaxAggregateInputType
+  }
+
+  export type ReviewsGroupByOutputType = {
+    id: number
+    title: string
+    summary: string
+    rating: number
+    image_path: string | null
+    review: string
+    link: string | null
+    _count: ReviewsCountAggregateOutputType | null
+    _avg: ReviewsAvgAggregateOutputType | null
+    _sum: ReviewsSumAggregateOutputType | null
+    _min: ReviewsMinAggregateOutputType | null
+    _max: ReviewsMaxAggregateOutputType | null
+  }
+
+  type GetReviewsGroupByPayload<T extends ReviewsGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ReviewsGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ReviewsGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ReviewsGroupByOutputType[P]>
+            : GetScalarType<T[P], ReviewsGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ReviewsSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    summary?: boolean
+    rating?: boolean
+    image_path?: boolean
+    review?: boolean
+    link?: boolean
+    tags?: boolean | Reviews$tagsArgs<ExtArgs>
+    _count?: boolean | ReviewsCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["reviews"]>
+
+  export type ReviewsSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    summary?: boolean
+    rating?: boolean
+    image_path?: boolean
+    review?: boolean
+    link?: boolean
+  }, ExtArgs["result"]["reviews"]>
+
+  export type ReviewsSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    summary?: boolean
+    rating?: boolean
+    image_path?: boolean
+    review?: boolean
+    link?: boolean
+  }, ExtArgs["result"]["reviews"]>
+
+  export type ReviewsSelectScalar = {
+    id?: boolean
+    title?: boolean
+    summary?: boolean
+    rating?: boolean
+    image_path?: boolean
+    review?: boolean
+    link?: boolean
+  }
+
+  export type ReviewsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "summary" | "rating" | "image_path" | "review" | "link", ExtArgs["result"]["reviews"]>
+  export type ReviewsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tags?: boolean | Reviews$tagsArgs<ExtArgs>
+    _count?: boolean | ReviewsCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type ReviewsIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type ReviewsIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $ReviewsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Reviews"
+    objects: {
+      tags: Prisma.$ConfigurationsPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      title: string
+      summary: string
+      rating: number
+      image_path: string | null
+      review: string
+      link: string | null
+    }, ExtArgs["result"]["reviews"]>
+    composites: {}
+  }
+
+  type ReviewsGetPayload<S extends boolean | null | undefined | ReviewsDefaultArgs> = $Result.GetResult<Prisma.$ReviewsPayload, S>
+
+  type ReviewsCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ReviewsFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ReviewsCountAggregateInputType | true
+    }
+
+  export interface ReviewsDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Reviews'], meta: { name: 'Reviews' } }
+    /**
+     * Find zero or one Reviews that matches the filter.
+     * @param {ReviewsFindUniqueArgs} args - Arguments to find a Reviews
+     * @example
+     * // Get one Reviews
+     * const reviews = await prisma.reviews.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ReviewsFindUniqueArgs>(args: SelectSubset<T, ReviewsFindUniqueArgs<ExtArgs>>): Prisma__ReviewsClient<$Result.GetResult<Prisma.$ReviewsPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Reviews that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ReviewsFindUniqueOrThrowArgs} args - Arguments to find a Reviews
+     * @example
+     * // Get one Reviews
+     * const reviews = await prisma.reviews.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ReviewsFindUniqueOrThrowArgs>(args: SelectSubset<T, ReviewsFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ReviewsClient<$Result.GetResult<Prisma.$ReviewsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Reviews that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReviewsFindFirstArgs} args - Arguments to find a Reviews
+     * @example
+     * // Get one Reviews
+     * const reviews = await prisma.reviews.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ReviewsFindFirstArgs>(args?: SelectSubset<T, ReviewsFindFirstArgs<ExtArgs>>): Prisma__ReviewsClient<$Result.GetResult<Prisma.$ReviewsPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Reviews that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReviewsFindFirstOrThrowArgs} args - Arguments to find a Reviews
+     * @example
+     * // Get one Reviews
+     * const reviews = await prisma.reviews.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ReviewsFindFirstOrThrowArgs>(args?: SelectSubset<T, ReviewsFindFirstOrThrowArgs<ExtArgs>>): Prisma__ReviewsClient<$Result.GetResult<Prisma.$ReviewsPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Reviews that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReviewsFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Reviews
+     * const reviews = await prisma.reviews.findMany()
+     * 
+     * // Get first 10 Reviews
+     * const reviews = await prisma.reviews.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const reviewsWithIdOnly = await prisma.reviews.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ReviewsFindManyArgs>(args?: SelectSubset<T, ReviewsFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReviewsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Reviews.
+     * @param {ReviewsCreateArgs} args - Arguments to create a Reviews.
+     * @example
+     * // Create one Reviews
+     * const Reviews = await prisma.reviews.create({
+     *   data: {
+     *     // ... data to create a Reviews
+     *   }
+     * })
+     * 
+     */
+    create<T extends ReviewsCreateArgs>(args: SelectSubset<T, ReviewsCreateArgs<ExtArgs>>): Prisma__ReviewsClient<$Result.GetResult<Prisma.$ReviewsPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Reviews.
+     * @param {ReviewsCreateManyArgs} args - Arguments to create many Reviews.
+     * @example
+     * // Create many Reviews
+     * const reviews = await prisma.reviews.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ReviewsCreateManyArgs>(args?: SelectSubset<T, ReviewsCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Reviews and returns the data saved in the database.
+     * @param {ReviewsCreateManyAndReturnArgs} args - Arguments to create many Reviews.
+     * @example
+     * // Create many Reviews
+     * const reviews = await prisma.reviews.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Reviews and only return the `id`
+     * const reviewsWithIdOnly = await prisma.reviews.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ReviewsCreateManyAndReturnArgs>(args?: SelectSubset<T, ReviewsCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReviewsPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Reviews.
+     * @param {ReviewsDeleteArgs} args - Arguments to delete one Reviews.
+     * @example
+     * // Delete one Reviews
+     * const Reviews = await prisma.reviews.delete({
+     *   where: {
+     *     // ... filter to delete one Reviews
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ReviewsDeleteArgs>(args: SelectSubset<T, ReviewsDeleteArgs<ExtArgs>>): Prisma__ReviewsClient<$Result.GetResult<Prisma.$ReviewsPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Reviews.
+     * @param {ReviewsUpdateArgs} args - Arguments to update one Reviews.
+     * @example
+     * // Update one Reviews
+     * const reviews = await prisma.reviews.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ReviewsUpdateArgs>(args: SelectSubset<T, ReviewsUpdateArgs<ExtArgs>>): Prisma__ReviewsClient<$Result.GetResult<Prisma.$ReviewsPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Reviews.
+     * @param {ReviewsDeleteManyArgs} args - Arguments to filter Reviews to delete.
+     * @example
+     * // Delete a few Reviews
+     * const { count } = await prisma.reviews.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ReviewsDeleteManyArgs>(args?: SelectSubset<T, ReviewsDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Reviews.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReviewsUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Reviews
+     * const reviews = await prisma.reviews.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ReviewsUpdateManyArgs>(args: SelectSubset<T, ReviewsUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Reviews and returns the data updated in the database.
+     * @param {ReviewsUpdateManyAndReturnArgs} args - Arguments to update many Reviews.
+     * @example
+     * // Update many Reviews
+     * const reviews = await prisma.reviews.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Reviews and only return the `id`
+     * const reviewsWithIdOnly = await prisma.reviews.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ReviewsUpdateManyAndReturnArgs>(args: SelectSubset<T, ReviewsUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReviewsPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Reviews.
+     * @param {ReviewsUpsertArgs} args - Arguments to update or create a Reviews.
+     * @example
+     * // Update or create a Reviews
+     * const reviews = await prisma.reviews.upsert({
+     *   create: {
+     *     // ... data to create a Reviews
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Reviews we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ReviewsUpsertArgs>(args: SelectSubset<T, ReviewsUpsertArgs<ExtArgs>>): Prisma__ReviewsClient<$Result.GetResult<Prisma.$ReviewsPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Reviews.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReviewsCountArgs} args - Arguments to filter Reviews to count.
+     * @example
+     * // Count the number of Reviews
+     * const count = await prisma.reviews.count({
+     *   where: {
+     *     // ... the filter for the Reviews we want to count
+     *   }
+     * })
+    **/
+    count<T extends ReviewsCountArgs>(
+      args?: Subset<T, ReviewsCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ReviewsCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Reviews.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReviewsAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ReviewsAggregateArgs>(args: Subset<T, ReviewsAggregateArgs>): Prisma.PrismaPromise<GetReviewsAggregateType<T>>
+
+    /**
+     * Group by Reviews.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReviewsGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ReviewsGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ReviewsGroupByArgs['orderBy'] }
+        : { orderBy?: ReviewsGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ReviewsGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetReviewsGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Reviews model
+   */
+  readonly fields: ReviewsFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Reviews.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ReviewsClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    tags<T extends Reviews$tagsArgs<ExtArgs> = {}>(args?: Subset<T, Reviews$tagsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ConfigurationsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Reviews model
+   */ 
+  interface ReviewsFieldRefs {
+    readonly id: FieldRef<"Reviews", 'Int'>
+    readonly title: FieldRef<"Reviews", 'String'>
+    readonly summary: FieldRef<"Reviews", 'String'>
+    readonly rating: FieldRef<"Reviews", 'Float'>
+    readonly image_path: FieldRef<"Reviews", 'String'>
+    readonly review: FieldRef<"Reviews", 'String'>
+    readonly link: FieldRef<"Reviews", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Reviews findUnique
+   */
+  export type ReviewsFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Reviews
+     */
+    select?: ReviewsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Reviews
+     */
+    omit?: ReviewsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReviewsInclude<ExtArgs> | null
+    /**
+     * Filter, which Reviews to fetch.
+     */
+    where: ReviewsWhereUniqueInput
+  }
+
+  /**
+   * Reviews findUniqueOrThrow
+   */
+  export type ReviewsFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Reviews
+     */
+    select?: ReviewsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Reviews
+     */
+    omit?: ReviewsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReviewsInclude<ExtArgs> | null
+    /**
+     * Filter, which Reviews to fetch.
+     */
+    where: ReviewsWhereUniqueInput
+  }
+
+  /**
+   * Reviews findFirst
+   */
+  export type ReviewsFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Reviews
+     */
+    select?: ReviewsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Reviews
+     */
+    omit?: ReviewsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReviewsInclude<ExtArgs> | null
+    /**
+     * Filter, which Reviews to fetch.
+     */
+    where?: ReviewsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Reviews to fetch.
+     */
+    orderBy?: ReviewsOrderByWithRelationInput | ReviewsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Reviews.
+     */
+    cursor?: ReviewsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Reviews from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Reviews.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Reviews.
+     */
+    distinct?: ReviewsScalarFieldEnum | ReviewsScalarFieldEnum[]
+  }
+
+  /**
+   * Reviews findFirstOrThrow
+   */
+  export type ReviewsFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Reviews
+     */
+    select?: ReviewsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Reviews
+     */
+    omit?: ReviewsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReviewsInclude<ExtArgs> | null
+    /**
+     * Filter, which Reviews to fetch.
+     */
+    where?: ReviewsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Reviews to fetch.
+     */
+    orderBy?: ReviewsOrderByWithRelationInput | ReviewsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Reviews.
+     */
+    cursor?: ReviewsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Reviews from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Reviews.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Reviews.
+     */
+    distinct?: ReviewsScalarFieldEnum | ReviewsScalarFieldEnum[]
+  }
+
+  /**
+   * Reviews findMany
+   */
+  export type ReviewsFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Reviews
+     */
+    select?: ReviewsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Reviews
+     */
+    omit?: ReviewsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReviewsInclude<ExtArgs> | null
+    /**
+     * Filter, which Reviews to fetch.
+     */
+    where?: ReviewsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Reviews to fetch.
+     */
+    orderBy?: ReviewsOrderByWithRelationInput | ReviewsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Reviews.
+     */
+    cursor?: ReviewsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Reviews from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Reviews.
+     */
+    skip?: number
+    distinct?: ReviewsScalarFieldEnum | ReviewsScalarFieldEnum[]
+  }
+
+  /**
+   * Reviews create
+   */
+  export type ReviewsCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Reviews
+     */
+    select?: ReviewsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Reviews
+     */
+    omit?: ReviewsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReviewsInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Reviews.
+     */
+    data: XOR<ReviewsCreateInput, ReviewsUncheckedCreateInput>
+  }
+
+  /**
+   * Reviews createMany
+   */
+  export type ReviewsCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Reviews.
+     */
+    data: ReviewsCreateManyInput | ReviewsCreateManyInput[]
+  }
+
+  /**
+   * Reviews createManyAndReturn
+   */
+  export type ReviewsCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Reviews
+     */
+    select?: ReviewsSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Reviews
+     */
+    omit?: ReviewsOmit<ExtArgs> | null
+    /**
+     * The data used to create many Reviews.
+     */
+    data: ReviewsCreateManyInput | ReviewsCreateManyInput[]
+  }
+
+  /**
+   * Reviews update
+   */
+  export type ReviewsUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Reviews
+     */
+    select?: ReviewsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Reviews
+     */
+    omit?: ReviewsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReviewsInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Reviews.
+     */
+    data: XOR<ReviewsUpdateInput, ReviewsUncheckedUpdateInput>
+    /**
+     * Choose, which Reviews to update.
+     */
+    where: ReviewsWhereUniqueInput
+  }
+
+  /**
+   * Reviews updateMany
+   */
+  export type ReviewsUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Reviews.
+     */
+    data: XOR<ReviewsUpdateManyMutationInput, ReviewsUncheckedUpdateManyInput>
+    /**
+     * Filter which Reviews to update
+     */
+    where?: ReviewsWhereInput
+    /**
+     * Limit how many Reviews to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Reviews updateManyAndReturn
+   */
+  export type ReviewsUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Reviews
+     */
+    select?: ReviewsSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Reviews
+     */
+    omit?: ReviewsOmit<ExtArgs> | null
+    /**
+     * The data used to update Reviews.
+     */
+    data: XOR<ReviewsUpdateManyMutationInput, ReviewsUncheckedUpdateManyInput>
+    /**
+     * Filter which Reviews to update
+     */
+    where?: ReviewsWhereInput
+    /**
+     * Limit how many Reviews to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Reviews upsert
+   */
+  export type ReviewsUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Reviews
+     */
+    select?: ReviewsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Reviews
+     */
+    omit?: ReviewsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReviewsInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Reviews to update in case it exists.
+     */
+    where: ReviewsWhereUniqueInput
+    /**
+     * In case the Reviews found by the `where` argument doesn't exist, create a new Reviews with this data.
+     */
+    create: XOR<ReviewsCreateInput, ReviewsUncheckedCreateInput>
+    /**
+     * In case the Reviews was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ReviewsUpdateInput, ReviewsUncheckedUpdateInput>
+  }
+
+  /**
+   * Reviews delete
+   */
+  export type ReviewsDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Reviews
+     */
+    select?: ReviewsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Reviews
+     */
+    omit?: ReviewsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReviewsInclude<ExtArgs> | null
+    /**
+     * Filter which Reviews to delete.
+     */
+    where: ReviewsWhereUniqueInput
+  }
+
+  /**
+   * Reviews deleteMany
+   */
+  export type ReviewsDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Reviews to delete
+     */
+    where?: ReviewsWhereInput
+    /**
+     * Limit how many Reviews to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Reviews.tags
+   */
+  export type Reviews$tagsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Configurations
+     */
+    select?: ConfigurationsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Configurations
+     */
+    omit?: ConfigurationsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ConfigurationsInclude<ExtArgs> | null
+    where?: ConfigurationsWhereInput
+    orderBy?: ConfigurationsOrderByWithRelationInput | ConfigurationsOrderByWithRelationInput[]
+    cursor?: ConfigurationsWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ConfigurationsScalarFieldEnum | ConfigurationsScalarFieldEnum[]
+  }
+
+  /**
+   * Reviews without action
+   */
+  export type ReviewsDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Reviews
+     */
+    select?: ReviewsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Reviews
+     */
+    omit?: ReviewsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReviewsInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Configurations
+   */
+
+  export type AggregateConfigurations = {
+    _count: ConfigurationsCountAggregateOutputType | null
+    _avg: ConfigurationsAvgAggregateOutputType | null
+    _sum: ConfigurationsSumAggregateOutputType | null
+    _min: ConfigurationsMinAggregateOutputType | null
+    _max: ConfigurationsMaxAggregateOutputType | null
+  }
+
+  export type ConfigurationsAvgAggregateOutputType = {
+    id: number | null
+  }
+
+  export type ConfigurationsSumAggregateOutputType = {
+    id: number | null
+  }
+
+  export type ConfigurationsMinAggregateOutputType = {
+    id: number | null
+    name: string | null
+    key: string | null
+    value: string | null
+  }
+
+  export type ConfigurationsMaxAggregateOutputType = {
+    id: number | null
+    name: string | null
+    key: string | null
+    value: string | null
+  }
+
+  export type ConfigurationsCountAggregateOutputType = {
+    id: number
+    name: number
+    key: number
+    value: number
+    _all: number
+  }
+
+
+  export type ConfigurationsAvgAggregateInputType = {
+    id?: true
+  }
+
+  export type ConfigurationsSumAggregateInputType = {
+    id?: true
+  }
+
+  export type ConfigurationsMinAggregateInputType = {
+    id?: true
+    name?: true
+    key?: true
+    value?: true
+  }
+
+  export type ConfigurationsMaxAggregateInputType = {
+    id?: true
+    name?: true
+    key?: true
+    value?: true
+  }
+
+  export type ConfigurationsCountAggregateInputType = {
+    id?: true
+    name?: true
+    key?: true
+    value?: true
+    _all?: true
+  }
+
+  export type ConfigurationsAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Configurations to aggregate.
+     */
+    where?: ConfigurationsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Configurations to fetch.
+     */
+    orderBy?: ConfigurationsOrderByWithRelationInput | ConfigurationsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ConfigurationsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Configurations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Configurations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Configurations
+    **/
+    _count?: true | ConfigurationsCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ConfigurationsAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ConfigurationsSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ConfigurationsMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ConfigurationsMaxAggregateInputType
+  }
+
+  export type GetConfigurationsAggregateType<T extends ConfigurationsAggregateArgs> = {
+        [P in keyof T & keyof AggregateConfigurations]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateConfigurations[P]>
+      : GetScalarType<T[P], AggregateConfigurations[P]>
+  }
+
+
+
+
+  export type ConfigurationsGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ConfigurationsWhereInput
+    orderBy?: ConfigurationsOrderByWithAggregationInput | ConfigurationsOrderByWithAggregationInput[]
+    by: ConfigurationsScalarFieldEnum[] | ConfigurationsScalarFieldEnum
+    having?: ConfigurationsScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ConfigurationsCountAggregateInputType | true
+    _avg?: ConfigurationsAvgAggregateInputType
+    _sum?: ConfigurationsSumAggregateInputType
+    _min?: ConfigurationsMinAggregateInputType
+    _max?: ConfigurationsMaxAggregateInputType
+  }
+
+  export type ConfigurationsGroupByOutputType = {
+    id: number
+    name: string
+    key: string
+    value: string
+    _count: ConfigurationsCountAggregateOutputType | null
+    _avg: ConfigurationsAvgAggregateOutputType | null
+    _sum: ConfigurationsSumAggregateOutputType | null
+    _min: ConfigurationsMinAggregateOutputType | null
+    _max: ConfigurationsMaxAggregateOutputType | null
+  }
+
+  type GetConfigurationsGroupByPayload<T extends ConfigurationsGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ConfigurationsGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ConfigurationsGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ConfigurationsGroupByOutputType[P]>
+            : GetScalarType<T[P], ConfigurationsGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ConfigurationsSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    key?: boolean
+    value?: boolean
+    reviews?: boolean | Configurations$reviewsArgs<ExtArgs>
+    _count?: boolean | ConfigurationsCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["configurations"]>
+
+  export type ConfigurationsSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    key?: boolean
+    value?: boolean
+  }, ExtArgs["result"]["configurations"]>
+
+  export type ConfigurationsSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    key?: boolean
+    value?: boolean
+  }, ExtArgs["result"]["configurations"]>
+
+  export type ConfigurationsSelectScalar = {
+    id?: boolean
+    name?: boolean
+    key?: boolean
+    value?: boolean
+  }
+
+  export type ConfigurationsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "key" | "value", ExtArgs["result"]["configurations"]>
+  export type ConfigurationsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    reviews?: boolean | Configurations$reviewsArgs<ExtArgs>
+    _count?: boolean | ConfigurationsCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type ConfigurationsIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type ConfigurationsIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $ConfigurationsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Configurations"
+    objects: {
+      reviews: Prisma.$ReviewsPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      name: string
+      key: string
+      value: string
+    }, ExtArgs["result"]["configurations"]>
+    composites: {}
+  }
+
+  type ConfigurationsGetPayload<S extends boolean | null | undefined | ConfigurationsDefaultArgs> = $Result.GetResult<Prisma.$ConfigurationsPayload, S>
+
+  type ConfigurationsCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ConfigurationsFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ConfigurationsCountAggregateInputType | true
+    }
+
+  export interface ConfigurationsDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Configurations'], meta: { name: 'Configurations' } }
+    /**
+     * Find zero or one Configurations that matches the filter.
+     * @param {ConfigurationsFindUniqueArgs} args - Arguments to find a Configurations
+     * @example
+     * // Get one Configurations
+     * const configurations = await prisma.configurations.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ConfigurationsFindUniqueArgs>(args: SelectSubset<T, ConfigurationsFindUniqueArgs<ExtArgs>>): Prisma__ConfigurationsClient<$Result.GetResult<Prisma.$ConfigurationsPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Configurations that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ConfigurationsFindUniqueOrThrowArgs} args - Arguments to find a Configurations
+     * @example
+     * // Get one Configurations
+     * const configurations = await prisma.configurations.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ConfigurationsFindUniqueOrThrowArgs>(args: SelectSubset<T, ConfigurationsFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ConfigurationsClient<$Result.GetResult<Prisma.$ConfigurationsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Configurations that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ConfigurationsFindFirstArgs} args - Arguments to find a Configurations
+     * @example
+     * // Get one Configurations
+     * const configurations = await prisma.configurations.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ConfigurationsFindFirstArgs>(args?: SelectSubset<T, ConfigurationsFindFirstArgs<ExtArgs>>): Prisma__ConfigurationsClient<$Result.GetResult<Prisma.$ConfigurationsPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Configurations that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ConfigurationsFindFirstOrThrowArgs} args - Arguments to find a Configurations
+     * @example
+     * // Get one Configurations
+     * const configurations = await prisma.configurations.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ConfigurationsFindFirstOrThrowArgs>(args?: SelectSubset<T, ConfigurationsFindFirstOrThrowArgs<ExtArgs>>): Prisma__ConfigurationsClient<$Result.GetResult<Prisma.$ConfigurationsPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Configurations that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ConfigurationsFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Configurations
+     * const configurations = await prisma.configurations.findMany()
+     * 
+     * // Get first 10 Configurations
+     * const configurations = await prisma.configurations.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const configurationsWithIdOnly = await prisma.configurations.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ConfigurationsFindManyArgs>(args?: SelectSubset<T, ConfigurationsFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ConfigurationsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Configurations.
+     * @param {ConfigurationsCreateArgs} args - Arguments to create a Configurations.
+     * @example
+     * // Create one Configurations
+     * const Configurations = await prisma.configurations.create({
+     *   data: {
+     *     // ... data to create a Configurations
+     *   }
+     * })
+     * 
+     */
+    create<T extends ConfigurationsCreateArgs>(args: SelectSubset<T, ConfigurationsCreateArgs<ExtArgs>>): Prisma__ConfigurationsClient<$Result.GetResult<Prisma.$ConfigurationsPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Configurations.
+     * @param {ConfigurationsCreateManyArgs} args - Arguments to create many Configurations.
+     * @example
+     * // Create many Configurations
+     * const configurations = await prisma.configurations.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ConfigurationsCreateManyArgs>(args?: SelectSubset<T, ConfigurationsCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Configurations and returns the data saved in the database.
+     * @param {ConfigurationsCreateManyAndReturnArgs} args - Arguments to create many Configurations.
+     * @example
+     * // Create many Configurations
+     * const configurations = await prisma.configurations.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Configurations and only return the `id`
+     * const configurationsWithIdOnly = await prisma.configurations.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ConfigurationsCreateManyAndReturnArgs>(args?: SelectSubset<T, ConfigurationsCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ConfigurationsPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Configurations.
+     * @param {ConfigurationsDeleteArgs} args - Arguments to delete one Configurations.
+     * @example
+     * // Delete one Configurations
+     * const Configurations = await prisma.configurations.delete({
+     *   where: {
+     *     // ... filter to delete one Configurations
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ConfigurationsDeleteArgs>(args: SelectSubset<T, ConfigurationsDeleteArgs<ExtArgs>>): Prisma__ConfigurationsClient<$Result.GetResult<Prisma.$ConfigurationsPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Configurations.
+     * @param {ConfigurationsUpdateArgs} args - Arguments to update one Configurations.
+     * @example
+     * // Update one Configurations
+     * const configurations = await prisma.configurations.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ConfigurationsUpdateArgs>(args: SelectSubset<T, ConfigurationsUpdateArgs<ExtArgs>>): Prisma__ConfigurationsClient<$Result.GetResult<Prisma.$ConfigurationsPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Configurations.
+     * @param {ConfigurationsDeleteManyArgs} args - Arguments to filter Configurations to delete.
+     * @example
+     * // Delete a few Configurations
+     * const { count } = await prisma.configurations.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ConfigurationsDeleteManyArgs>(args?: SelectSubset<T, ConfigurationsDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Configurations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ConfigurationsUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Configurations
+     * const configurations = await prisma.configurations.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ConfigurationsUpdateManyArgs>(args: SelectSubset<T, ConfigurationsUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Configurations and returns the data updated in the database.
+     * @param {ConfigurationsUpdateManyAndReturnArgs} args - Arguments to update many Configurations.
+     * @example
+     * // Update many Configurations
+     * const configurations = await prisma.configurations.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Configurations and only return the `id`
+     * const configurationsWithIdOnly = await prisma.configurations.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ConfigurationsUpdateManyAndReturnArgs>(args: SelectSubset<T, ConfigurationsUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ConfigurationsPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Configurations.
+     * @param {ConfigurationsUpsertArgs} args - Arguments to update or create a Configurations.
+     * @example
+     * // Update or create a Configurations
+     * const configurations = await prisma.configurations.upsert({
+     *   create: {
+     *     // ... data to create a Configurations
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Configurations we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ConfigurationsUpsertArgs>(args: SelectSubset<T, ConfigurationsUpsertArgs<ExtArgs>>): Prisma__ConfigurationsClient<$Result.GetResult<Prisma.$ConfigurationsPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Configurations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ConfigurationsCountArgs} args - Arguments to filter Configurations to count.
+     * @example
+     * // Count the number of Configurations
+     * const count = await prisma.configurations.count({
+     *   where: {
+     *     // ... the filter for the Configurations we want to count
+     *   }
+     * })
+    **/
+    count<T extends ConfigurationsCountArgs>(
+      args?: Subset<T, ConfigurationsCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ConfigurationsCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Configurations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ConfigurationsAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ConfigurationsAggregateArgs>(args: Subset<T, ConfigurationsAggregateArgs>): Prisma.PrismaPromise<GetConfigurationsAggregateType<T>>
+
+    /**
+     * Group by Configurations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ConfigurationsGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ConfigurationsGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ConfigurationsGroupByArgs['orderBy'] }
+        : { orderBy?: ConfigurationsGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ConfigurationsGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetConfigurationsGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Configurations model
+   */
+  readonly fields: ConfigurationsFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Configurations.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ConfigurationsClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    reviews<T extends Configurations$reviewsArgs<ExtArgs> = {}>(args?: Subset<T, Configurations$reviewsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReviewsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Configurations model
+   */ 
+  interface ConfigurationsFieldRefs {
+    readonly id: FieldRef<"Configurations", 'Int'>
+    readonly name: FieldRef<"Configurations", 'String'>
+    readonly key: FieldRef<"Configurations", 'String'>
+    readonly value: FieldRef<"Configurations", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Configurations findUnique
+   */
+  export type ConfigurationsFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Configurations
+     */
+    select?: ConfigurationsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Configurations
+     */
+    omit?: ConfigurationsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ConfigurationsInclude<ExtArgs> | null
+    /**
+     * Filter, which Configurations to fetch.
+     */
+    where: ConfigurationsWhereUniqueInput
+  }
+
+  /**
+   * Configurations findUniqueOrThrow
+   */
+  export type ConfigurationsFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Configurations
+     */
+    select?: ConfigurationsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Configurations
+     */
+    omit?: ConfigurationsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ConfigurationsInclude<ExtArgs> | null
+    /**
+     * Filter, which Configurations to fetch.
+     */
+    where: ConfigurationsWhereUniqueInput
+  }
+
+  /**
+   * Configurations findFirst
+   */
+  export type ConfigurationsFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Configurations
+     */
+    select?: ConfigurationsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Configurations
+     */
+    omit?: ConfigurationsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ConfigurationsInclude<ExtArgs> | null
+    /**
+     * Filter, which Configurations to fetch.
+     */
+    where?: ConfigurationsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Configurations to fetch.
+     */
+    orderBy?: ConfigurationsOrderByWithRelationInput | ConfigurationsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Configurations.
+     */
+    cursor?: ConfigurationsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Configurations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Configurations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Configurations.
+     */
+    distinct?: ConfigurationsScalarFieldEnum | ConfigurationsScalarFieldEnum[]
+  }
+
+  /**
+   * Configurations findFirstOrThrow
+   */
+  export type ConfigurationsFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Configurations
+     */
+    select?: ConfigurationsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Configurations
+     */
+    omit?: ConfigurationsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ConfigurationsInclude<ExtArgs> | null
+    /**
+     * Filter, which Configurations to fetch.
+     */
+    where?: ConfigurationsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Configurations to fetch.
+     */
+    orderBy?: ConfigurationsOrderByWithRelationInput | ConfigurationsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Configurations.
+     */
+    cursor?: ConfigurationsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Configurations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Configurations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Configurations.
+     */
+    distinct?: ConfigurationsScalarFieldEnum | ConfigurationsScalarFieldEnum[]
+  }
+
+  /**
+   * Configurations findMany
+   */
+  export type ConfigurationsFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Configurations
+     */
+    select?: ConfigurationsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Configurations
+     */
+    omit?: ConfigurationsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ConfigurationsInclude<ExtArgs> | null
+    /**
+     * Filter, which Configurations to fetch.
+     */
+    where?: ConfigurationsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Configurations to fetch.
+     */
+    orderBy?: ConfigurationsOrderByWithRelationInput | ConfigurationsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Configurations.
+     */
+    cursor?: ConfigurationsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Configurations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Configurations.
+     */
+    skip?: number
+    distinct?: ConfigurationsScalarFieldEnum | ConfigurationsScalarFieldEnum[]
+  }
+
+  /**
+   * Configurations create
+   */
+  export type ConfigurationsCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Configurations
+     */
+    select?: ConfigurationsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Configurations
+     */
+    omit?: ConfigurationsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ConfigurationsInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Configurations.
+     */
+    data: XOR<ConfigurationsCreateInput, ConfigurationsUncheckedCreateInput>
+  }
+
+  /**
+   * Configurations createMany
+   */
+  export type ConfigurationsCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Configurations.
+     */
+    data: ConfigurationsCreateManyInput | ConfigurationsCreateManyInput[]
+  }
+
+  /**
+   * Configurations createManyAndReturn
+   */
+  export type ConfigurationsCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Configurations
+     */
+    select?: ConfigurationsSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Configurations
+     */
+    omit?: ConfigurationsOmit<ExtArgs> | null
+    /**
+     * The data used to create many Configurations.
+     */
+    data: ConfigurationsCreateManyInput | ConfigurationsCreateManyInput[]
+  }
+
+  /**
+   * Configurations update
+   */
+  export type ConfigurationsUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Configurations
+     */
+    select?: ConfigurationsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Configurations
+     */
+    omit?: ConfigurationsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ConfigurationsInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Configurations.
+     */
+    data: XOR<ConfigurationsUpdateInput, ConfigurationsUncheckedUpdateInput>
+    /**
+     * Choose, which Configurations to update.
+     */
+    where: ConfigurationsWhereUniqueInput
+  }
+
+  /**
+   * Configurations updateMany
+   */
+  export type ConfigurationsUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Configurations.
+     */
+    data: XOR<ConfigurationsUpdateManyMutationInput, ConfigurationsUncheckedUpdateManyInput>
+    /**
+     * Filter which Configurations to update
+     */
+    where?: ConfigurationsWhereInput
+    /**
+     * Limit how many Configurations to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Configurations updateManyAndReturn
+   */
+  export type ConfigurationsUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Configurations
+     */
+    select?: ConfigurationsSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Configurations
+     */
+    omit?: ConfigurationsOmit<ExtArgs> | null
+    /**
+     * The data used to update Configurations.
+     */
+    data: XOR<ConfigurationsUpdateManyMutationInput, ConfigurationsUncheckedUpdateManyInput>
+    /**
+     * Filter which Configurations to update
+     */
+    where?: ConfigurationsWhereInput
+    /**
+     * Limit how many Configurations to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Configurations upsert
+   */
+  export type ConfigurationsUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Configurations
+     */
+    select?: ConfigurationsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Configurations
+     */
+    omit?: ConfigurationsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ConfigurationsInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Configurations to update in case it exists.
+     */
+    where: ConfigurationsWhereUniqueInput
+    /**
+     * In case the Configurations found by the `where` argument doesn't exist, create a new Configurations with this data.
+     */
+    create: XOR<ConfigurationsCreateInput, ConfigurationsUncheckedCreateInput>
+    /**
+     * In case the Configurations was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ConfigurationsUpdateInput, ConfigurationsUncheckedUpdateInput>
+  }
+
+  /**
+   * Configurations delete
+   */
+  export type ConfigurationsDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Configurations
+     */
+    select?: ConfigurationsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Configurations
+     */
+    omit?: ConfigurationsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ConfigurationsInclude<ExtArgs> | null
+    /**
+     * Filter which Configurations to delete.
+     */
+    where: ConfigurationsWhereUniqueInput
+  }
+
+  /**
+   * Configurations deleteMany
+   */
+  export type ConfigurationsDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Configurations to delete
+     */
+    where?: ConfigurationsWhereInput
+    /**
+     * Limit how many Configurations to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Configurations.reviews
+   */
+  export type Configurations$reviewsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Reviews
+     */
+    select?: ReviewsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Reviews
+     */
+    omit?: ReviewsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReviewsInclude<ExtArgs> | null
+    where?: ReviewsWhereInput
+    orderBy?: ReviewsOrderByWithRelationInput | ReviewsOrderByWithRelationInput[]
+    cursor?: ReviewsWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ReviewsScalarFieldEnum | ReviewsScalarFieldEnum[]
+  }
+
+  /**
+   * Configurations without action
+   */
+  export type ConfigurationsDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Configurations
+     */
+    select?: ConfigurationsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Configurations
+     */
+    omit?: ConfigurationsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ConfigurationsInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -1962,6 +4426,29 @@ export namespace Prisma {
   };
 
   export type DocumentsScalarFieldEnum = (typeof DocumentsScalarFieldEnum)[keyof typeof DocumentsScalarFieldEnum]
+
+
+  export const ReviewsScalarFieldEnum: {
+    id: 'id',
+    title: 'title',
+    summary: 'summary',
+    rating: 'rating',
+    image_path: 'image_path',
+    review: 'review',
+    link: 'link'
+  };
+
+  export type ReviewsScalarFieldEnum = (typeof ReviewsScalarFieldEnum)[keyof typeof ReviewsScalarFieldEnum]
+
+
+  export const ConfigurationsScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    key: 'key',
+    value: 'value'
+  };
+
+  export type ConfigurationsScalarFieldEnum = (typeof ConfigurationsScalarFieldEnum)[keyof typeof ConfigurationsScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -2117,6 +4604,126 @@ export namespace Prisma {
     body?: JsonNullableWithAggregatesFilter<"Documents">
   }
 
+  export type ReviewsWhereInput = {
+    AND?: ReviewsWhereInput | ReviewsWhereInput[]
+    OR?: ReviewsWhereInput[]
+    NOT?: ReviewsWhereInput | ReviewsWhereInput[]
+    id?: IntFilter<"Reviews"> | number
+    title?: StringFilter<"Reviews"> | string
+    summary?: StringFilter<"Reviews"> | string
+    rating?: FloatFilter<"Reviews"> | number
+    image_path?: StringNullableFilter<"Reviews"> | string | null
+    review?: StringFilter<"Reviews"> | string
+    link?: StringNullableFilter<"Reviews"> | string | null
+    tags?: ConfigurationsListRelationFilter
+  }
+
+  export type ReviewsOrderByWithRelationInput = {
+    id?: SortOrder
+    title?: SortOrder
+    summary?: SortOrder
+    rating?: SortOrder
+    image_path?: SortOrderInput | SortOrder
+    review?: SortOrder
+    link?: SortOrderInput | SortOrder
+    tags?: ConfigurationsOrderByRelationAggregateInput
+  }
+
+  export type ReviewsWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: ReviewsWhereInput | ReviewsWhereInput[]
+    OR?: ReviewsWhereInput[]
+    NOT?: ReviewsWhereInput | ReviewsWhereInput[]
+    title?: StringFilter<"Reviews"> | string
+    summary?: StringFilter<"Reviews"> | string
+    rating?: FloatFilter<"Reviews"> | number
+    image_path?: StringNullableFilter<"Reviews"> | string | null
+    review?: StringFilter<"Reviews"> | string
+    link?: StringNullableFilter<"Reviews"> | string | null
+    tags?: ConfigurationsListRelationFilter
+  }, "id">
+
+  export type ReviewsOrderByWithAggregationInput = {
+    id?: SortOrder
+    title?: SortOrder
+    summary?: SortOrder
+    rating?: SortOrder
+    image_path?: SortOrderInput | SortOrder
+    review?: SortOrder
+    link?: SortOrderInput | SortOrder
+    _count?: ReviewsCountOrderByAggregateInput
+    _avg?: ReviewsAvgOrderByAggregateInput
+    _max?: ReviewsMaxOrderByAggregateInput
+    _min?: ReviewsMinOrderByAggregateInput
+    _sum?: ReviewsSumOrderByAggregateInput
+  }
+
+  export type ReviewsScalarWhereWithAggregatesInput = {
+    AND?: ReviewsScalarWhereWithAggregatesInput | ReviewsScalarWhereWithAggregatesInput[]
+    OR?: ReviewsScalarWhereWithAggregatesInput[]
+    NOT?: ReviewsScalarWhereWithAggregatesInput | ReviewsScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"Reviews"> | number
+    title?: StringWithAggregatesFilter<"Reviews"> | string
+    summary?: StringWithAggregatesFilter<"Reviews"> | string
+    rating?: FloatWithAggregatesFilter<"Reviews"> | number
+    image_path?: StringNullableWithAggregatesFilter<"Reviews"> | string | null
+    review?: StringWithAggregatesFilter<"Reviews"> | string
+    link?: StringNullableWithAggregatesFilter<"Reviews"> | string | null
+  }
+
+  export type ConfigurationsWhereInput = {
+    AND?: ConfigurationsWhereInput | ConfigurationsWhereInput[]
+    OR?: ConfigurationsWhereInput[]
+    NOT?: ConfigurationsWhereInput | ConfigurationsWhereInput[]
+    id?: IntFilter<"Configurations"> | number
+    name?: StringFilter<"Configurations"> | string
+    key?: StringFilter<"Configurations"> | string
+    value?: StringFilter<"Configurations"> | string
+    reviews?: ReviewsListRelationFilter
+  }
+
+  export type ConfigurationsOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    key?: SortOrder
+    value?: SortOrder
+    reviews?: ReviewsOrderByRelationAggregateInput
+  }
+
+  export type ConfigurationsWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    key_value?: ConfigurationsKeyValueCompoundUniqueInput
+    AND?: ConfigurationsWhereInput | ConfigurationsWhereInput[]
+    OR?: ConfigurationsWhereInput[]
+    NOT?: ConfigurationsWhereInput | ConfigurationsWhereInput[]
+    name?: StringFilter<"Configurations"> | string
+    key?: StringFilter<"Configurations"> | string
+    value?: StringFilter<"Configurations"> | string
+    reviews?: ReviewsListRelationFilter
+  }, "id" | "key_value">
+
+  export type ConfigurationsOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    key?: SortOrder
+    value?: SortOrder
+    _count?: ConfigurationsCountOrderByAggregateInput
+    _avg?: ConfigurationsAvgOrderByAggregateInput
+    _max?: ConfigurationsMaxOrderByAggregateInput
+    _min?: ConfigurationsMinOrderByAggregateInput
+    _sum?: ConfigurationsSumOrderByAggregateInput
+  }
+
+  export type ConfigurationsScalarWhereWithAggregatesInput = {
+    AND?: ConfigurationsScalarWhereWithAggregatesInput | ConfigurationsScalarWhereWithAggregatesInput[]
+    OR?: ConfigurationsScalarWhereWithAggregatesInput[]
+    NOT?: ConfigurationsScalarWhereWithAggregatesInput | ConfigurationsScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"Configurations"> | number
+    name?: StringWithAggregatesFilter<"Configurations"> | string
+    key?: StringWithAggregatesFilter<"Configurations"> | string
+    value?: StringWithAggregatesFilter<"Configurations"> | string
+  }
+
   export type DocumentsCreateInput = {
     userId: number
     parentId?: number | null
@@ -2189,6 +4796,127 @@ export namespace Prisma {
     created_at?: StringFieldUpdateOperationsInput | string
     updated_at?: NullableStringFieldUpdateOperationsInput | string | null
     body?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type ReviewsCreateInput = {
+    title: string
+    summary: string
+    rating: number
+    image_path?: string | null
+    review: string
+    link?: string | null
+    tags?: ConfigurationsCreateNestedManyWithoutReviewsInput
+  }
+
+  export type ReviewsUncheckedCreateInput = {
+    id?: number
+    title: string
+    summary: string
+    rating: number
+    image_path?: string | null
+    review: string
+    link?: string | null
+    tags?: ConfigurationsUncheckedCreateNestedManyWithoutReviewsInput
+  }
+
+  export type ReviewsUpdateInput = {
+    title?: StringFieldUpdateOperationsInput | string
+    summary?: StringFieldUpdateOperationsInput | string
+    rating?: FloatFieldUpdateOperationsInput | number
+    image_path?: NullableStringFieldUpdateOperationsInput | string | null
+    review?: StringFieldUpdateOperationsInput | string
+    link?: NullableStringFieldUpdateOperationsInput | string | null
+    tags?: ConfigurationsUpdateManyWithoutReviewsNestedInput
+  }
+
+  export type ReviewsUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    summary?: StringFieldUpdateOperationsInput | string
+    rating?: FloatFieldUpdateOperationsInput | number
+    image_path?: NullableStringFieldUpdateOperationsInput | string | null
+    review?: StringFieldUpdateOperationsInput | string
+    link?: NullableStringFieldUpdateOperationsInput | string | null
+    tags?: ConfigurationsUncheckedUpdateManyWithoutReviewsNestedInput
+  }
+
+  export type ReviewsCreateManyInput = {
+    id?: number
+    title: string
+    summary: string
+    rating: number
+    image_path?: string | null
+    review: string
+    link?: string | null
+  }
+
+  export type ReviewsUpdateManyMutationInput = {
+    title?: StringFieldUpdateOperationsInput | string
+    summary?: StringFieldUpdateOperationsInput | string
+    rating?: FloatFieldUpdateOperationsInput | number
+    image_path?: NullableStringFieldUpdateOperationsInput | string | null
+    review?: StringFieldUpdateOperationsInput | string
+    link?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ReviewsUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    summary?: StringFieldUpdateOperationsInput | string
+    rating?: FloatFieldUpdateOperationsInput | number
+    image_path?: NullableStringFieldUpdateOperationsInput | string | null
+    review?: StringFieldUpdateOperationsInput | string
+    link?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ConfigurationsCreateInput = {
+    name: string
+    key: string
+    value: string
+    reviews?: ReviewsCreateNestedManyWithoutTagsInput
+  }
+
+  export type ConfigurationsUncheckedCreateInput = {
+    id?: number
+    name: string
+    key: string
+    value: string
+    reviews?: ReviewsUncheckedCreateNestedManyWithoutTagsInput
+  }
+
+  export type ConfigurationsUpdateInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
+    value?: StringFieldUpdateOperationsInput | string
+    reviews?: ReviewsUpdateManyWithoutTagsNestedInput
+  }
+
+  export type ConfigurationsUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
+    value?: StringFieldUpdateOperationsInput | string
+    reviews?: ReviewsUncheckedUpdateManyWithoutTagsNestedInput
+  }
+
+  export type ConfigurationsCreateManyInput = {
+    id?: number
+    name: string
+    key: string
+    value: string
+  }
+
+  export type ConfigurationsUpdateManyMutationInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
+    value?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ConfigurationsUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
+    value?: StringFieldUpdateOperationsInput | string
   }
 
   export type IntFilter<$PrismaModel = never> = {
@@ -2394,6 +5122,127 @@ export namespace Prisma {
     _max?: NestedJsonNullableFilter<$PrismaModel>
   }
 
+  export type FloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[]
+    notIn?: number[]
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
+  export type ConfigurationsListRelationFilter = {
+    every?: ConfigurationsWhereInput
+    some?: ConfigurationsWhereInput
+    none?: ConfigurationsWhereInput
+  }
+
+  export type ConfigurationsOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ReviewsCountOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    summary?: SortOrder
+    rating?: SortOrder
+    image_path?: SortOrder
+    review?: SortOrder
+    link?: SortOrder
+  }
+
+  export type ReviewsAvgOrderByAggregateInput = {
+    id?: SortOrder
+    rating?: SortOrder
+  }
+
+  export type ReviewsMaxOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    summary?: SortOrder
+    rating?: SortOrder
+    image_path?: SortOrder
+    review?: SortOrder
+    link?: SortOrder
+  }
+
+  export type ReviewsMinOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    summary?: SortOrder
+    rating?: SortOrder
+    image_path?: SortOrder
+    review?: SortOrder
+    link?: SortOrder
+  }
+
+  export type ReviewsSumOrderByAggregateInput = {
+    id?: SortOrder
+    rating?: SortOrder
+  }
+
+  export type FloatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[]
+    notIn?: number[]
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedFloatFilter<$PrismaModel>
+    _min?: NestedFloatFilter<$PrismaModel>
+    _max?: NestedFloatFilter<$PrismaModel>
+  }
+
+  export type ReviewsListRelationFilter = {
+    every?: ReviewsWhereInput
+    some?: ReviewsWhereInput
+    none?: ReviewsWhereInput
+  }
+
+  export type ReviewsOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ConfigurationsKeyValueCompoundUniqueInput = {
+    key: string
+    value: string
+  }
+
+  export type ConfigurationsCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    key?: SortOrder
+    value?: SortOrder
+  }
+
+  export type ConfigurationsAvgOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type ConfigurationsMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    key?: SortOrder
+    value?: SortOrder
+  }
+
+  export type ConfigurationsMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    key?: SortOrder
+    value?: SortOrder
+  }
+
+  export type ConfigurationsSumOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
   export type IntFieldUpdateOperationsInput = {
     set?: number
     increment?: number
@@ -2416,6 +5265,90 @@ export namespace Prisma {
 
   export type NullableStringFieldUpdateOperationsInput = {
     set?: string | null
+  }
+
+  export type ConfigurationsCreateNestedManyWithoutReviewsInput = {
+    create?: XOR<ConfigurationsCreateWithoutReviewsInput, ConfigurationsUncheckedCreateWithoutReviewsInput> | ConfigurationsCreateWithoutReviewsInput[] | ConfigurationsUncheckedCreateWithoutReviewsInput[]
+    connectOrCreate?: ConfigurationsCreateOrConnectWithoutReviewsInput | ConfigurationsCreateOrConnectWithoutReviewsInput[]
+    connect?: ConfigurationsWhereUniqueInput | ConfigurationsWhereUniqueInput[]
+  }
+
+  export type ConfigurationsUncheckedCreateNestedManyWithoutReviewsInput = {
+    create?: XOR<ConfigurationsCreateWithoutReviewsInput, ConfigurationsUncheckedCreateWithoutReviewsInput> | ConfigurationsCreateWithoutReviewsInput[] | ConfigurationsUncheckedCreateWithoutReviewsInput[]
+    connectOrCreate?: ConfigurationsCreateOrConnectWithoutReviewsInput | ConfigurationsCreateOrConnectWithoutReviewsInput[]
+    connect?: ConfigurationsWhereUniqueInput | ConfigurationsWhereUniqueInput[]
+  }
+
+  export type FloatFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type ConfigurationsUpdateManyWithoutReviewsNestedInput = {
+    create?: XOR<ConfigurationsCreateWithoutReviewsInput, ConfigurationsUncheckedCreateWithoutReviewsInput> | ConfigurationsCreateWithoutReviewsInput[] | ConfigurationsUncheckedCreateWithoutReviewsInput[]
+    connectOrCreate?: ConfigurationsCreateOrConnectWithoutReviewsInput | ConfigurationsCreateOrConnectWithoutReviewsInput[]
+    upsert?: ConfigurationsUpsertWithWhereUniqueWithoutReviewsInput | ConfigurationsUpsertWithWhereUniqueWithoutReviewsInput[]
+    set?: ConfigurationsWhereUniqueInput | ConfigurationsWhereUniqueInput[]
+    disconnect?: ConfigurationsWhereUniqueInput | ConfigurationsWhereUniqueInput[]
+    delete?: ConfigurationsWhereUniqueInput | ConfigurationsWhereUniqueInput[]
+    connect?: ConfigurationsWhereUniqueInput | ConfigurationsWhereUniqueInput[]
+    update?: ConfigurationsUpdateWithWhereUniqueWithoutReviewsInput | ConfigurationsUpdateWithWhereUniqueWithoutReviewsInput[]
+    updateMany?: ConfigurationsUpdateManyWithWhereWithoutReviewsInput | ConfigurationsUpdateManyWithWhereWithoutReviewsInput[]
+    deleteMany?: ConfigurationsScalarWhereInput | ConfigurationsScalarWhereInput[]
+  }
+
+  export type ConfigurationsUncheckedUpdateManyWithoutReviewsNestedInput = {
+    create?: XOR<ConfigurationsCreateWithoutReviewsInput, ConfigurationsUncheckedCreateWithoutReviewsInput> | ConfigurationsCreateWithoutReviewsInput[] | ConfigurationsUncheckedCreateWithoutReviewsInput[]
+    connectOrCreate?: ConfigurationsCreateOrConnectWithoutReviewsInput | ConfigurationsCreateOrConnectWithoutReviewsInput[]
+    upsert?: ConfigurationsUpsertWithWhereUniqueWithoutReviewsInput | ConfigurationsUpsertWithWhereUniqueWithoutReviewsInput[]
+    set?: ConfigurationsWhereUniqueInput | ConfigurationsWhereUniqueInput[]
+    disconnect?: ConfigurationsWhereUniqueInput | ConfigurationsWhereUniqueInput[]
+    delete?: ConfigurationsWhereUniqueInput | ConfigurationsWhereUniqueInput[]
+    connect?: ConfigurationsWhereUniqueInput | ConfigurationsWhereUniqueInput[]
+    update?: ConfigurationsUpdateWithWhereUniqueWithoutReviewsInput | ConfigurationsUpdateWithWhereUniqueWithoutReviewsInput[]
+    updateMany?: ConfigurationsUpdateManyWithWhereWithoutReviewsInput | ConfigurationsUpdateManyWithWhereWithoutReviewsInput[]
+    deleteMany?: ConfigurationsScalarWhereInput | ConfigurationsScalarWhereInput[]
+  }
+
+  export type ReviewsCreateNestedManyWithoutTagsInput = {
+    create?: XOR<ReviewsCreateWithoutTagsInput, ReviewsUncheckedCreateWithoutTagsInput> | ReviewsCreateWithoutTagsInput[] | ReviewsUncheckedCreateWithoutTagsInput[]
+    connectOrCreate?: ReviewsCreateOrConnectWithoutTagsInput | ReviewsCreateOrConnectWithoutTagsInput[]
+    connect?: ReviewsWhereUniqueInput | ReviewsWhereUniqueInput[]
+  }
+
+  export type ReviewsUncheckedCreateNestedManyWithoutTagsInput = {
+    create?: XOR<ReviewsCreateWithoutTagsInput, ReviewsUncheckedCreateWithoutTagsInput> | ReviewsCreateWithoutTagsInput[] | ReviewsUncheckedCreateWithoutTagsInput[]
+    connectOrCreate?: ReviewsCreateOrConnectWithoutTagsInput | ReviewsCreateOrConnectWithoutTagsInput[]
+    connect?: ReviewsWhereUniqueInput | ReviewsWhereUniqueInput[]
+  }
+
+  export type ReviewsUpdateManyWithoutTagsNestedInput = {
+    create?: XOR<ReviewsCreateWithoutTagsInput, ReviewsUncheckedCreateWithoutTagsInput> | ReviewsCreateWithoutTagsInput[] | ReviewsUncheckedCreateWithoutTagsInput[]
+    connectOrCreate?: ReviewsCreateOrConnectWithoutTagsInput | ReviewsCreateOrConnectWithoutTagsInput[]
+    upsert?: ReviewsUpsertWithWhereUniqueWithoutTagsInput | ReviewsUpsertWithWhereUniqueWithoutTagsInput[]
+    set?: ReviewsWhereUniqueInput | ReviewsWhereUniqueInput[]
+    disconnect?: ReviewsWhereUniqueInput | ReviewsWhereUniqueInput[]
+    delete?: ReviewsWhereUniqueInput | ReviewsWhereUniqueInput[]
+    connect?: ReviewsWhereUniqueInput | ReviewsWhereUniqueInput[]
+    update?: ReviewsUpdateWithWhereUniqueWithoutTagsInput | ReviewsUpdateWithWhereUniqueWithoutTagsInput[]
+    updateMany?: ReviewsUpdateManyWithWhereWithoutTagsInput | ReviewsUpdateManyWithWhereWithoutTagsInput[]
+    deleteMany?: ReviewsScalarWhereInput | ReviewsScalarWhereInput[]
+  }
+
+  export type ReviewsUncheckedUpdateManyWithoutTagsNestedInput = {
+    create?: XOR<ReviewsCreateWithoutTagsInput, ReviewsUncheckedCreateWithoutTagsInput> | ReviewsCreateWithoutTagsInput[] | ReviewsUncheckedCreateWithoutTagsInput[]
+    connectOrCreate?: ReviewsCreateOrConnectWithoutTagsInput | ReviewsCreateOrConnectWithoutTagsInput[]
+    upsert?: ReviewsUpsertWithWhereUniqueWithoutTagsInput | ReviewsUpsertWithWhereUniqueWithoutTagsInput[]
+    set?: ReviewsWhereUniqueInput | ReviewsWhereUniqueInput[]
+    disconnect?: ReviewsWhereUniqueInput | ReviewsWhereUniqueInput[]
+    delete?: ReviewsWhereUniqueInput | ReviewsWhereUniqueInput[]
+    connect?: ReviewsWhereUniqueInput | ReviewsWhereUniqueInput[]
+    update?: ReviewsUpdateWithWhereUniqueWithoutTagsInput | ReviewsUpdateWithWhereUniqueWithoutTagsInput[]
+    updateMany?: ReviewsUpdateManyWithWhereWithoutTagsInput | ReviewsUpdateManyWithWhereWithoutTagsInput[]
+    deleteMany?: ReviewsScalarWhereInput | ReviewsScalarWhereInput[]
   }
 
   export type NestedIntFilter<$PrismaModel = never> = {
@@ -2572,6 +5505,168 @@ export namespace Prisma {
     array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
     array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[]
+    notIn?: number[]
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedFloatFilter<$PrismaModel>
+    _min?: NestedFloatFilter<$PrismaModel>
+    _max?: NestedFloatFilter<$PrismaModel>
+  }
+
+  export type ConfigurationsCreateWithoutReviewsInput = {
+    name: string
+    key: string
+    value: string
+  }
+
+  export type ConfigurationsUncheckedCreateWithoutReviewsInput = {
+    id?: number
+    name: string
+    key: string
+    value: string
+  }
+
+  export type ConfigurationsCreateOrConnectWithoutReviewsInput = {
+    where: ConfigurationsWhereUniqueInput
+    create: XOR<ConfigurationsCreateWithoutReviewsInput, ConfigurationsUncheckedCreateWithoutReviewsInput>
+  }
+
+  export type ConfigurationsUpsertWithWhereUniqueWithoutReviewsInput = {
+    where: ConfigurationsWhereUniqueInput
+    update: XOR<ConfigurationsUpdateWithoutReviewsInput, ConfigurationsUncheckedUpdateWithoutReviewsInput>
+    create: XOR<ConfigurationsCreateWithoutReviewsInput, ConfigurationsUncheckedCreateWithoutReviewsInput>
+  }
+
+  export type ConfigurationsUpdateWithWhereUniqueWithoutReviewsInput = {
+    where: ConfigurationsWhereUniqueInput
+    data: XOR<ConfigurationsUpdateWithoutReviewsInput, ConfigurationsUncheckedUpdateWithoutReviewsInput>
+  }
+
+  export type ConfigurationsUpdateManyWithWhereWithoutReviewsInput = {
+    where: ConfigurationsScalarWhereInput
+    data: XOR<ConfigurationsUpdateManyMutationInput, ConfigurationsUncheckedUpdateManyWithoutReviewsInput>
+  }
+
+  export type ConfigurationsScalarWhereInput = {
+    AND?: ConfigurationsScalarWhereInput | ConfigurationsScalarWhereInput[]
+    OR?: ConfigurationsScalarWhereInput[]
+    NOT?: ConfigurationsScalarWhereInput | ConfigurationsScalarWhereInput[]
+    id?: IntFilter<"Configurations"> | number
+    name?: StringFilter<"Configurations"> | string
+    key?: StringFilter<"Configurations"> | string
+    value?: StringFilter<"Configurations"> | string
+  }
+
+  export type ReviewsCreateWithoutTagsInput = {
+    title: string
+    summary: string
+    rating: number
+    image_path?: string | null
+    review: string
+    link?: string | null
+  }
+
+  export type ReviewsUncheckedCreateWithoutTagsInput = {
+    id?: number
+    title: string
+    summary: string
+    rating: number
+    image_path?: string | null
+    review: string
+    link?: string | null
+  }
+
+  export type ReviewsCreateOrConnectWithoutTagsInput = {
+    where: ReviewsWhereUniqueInput
+    create: XOR<ReviewsCreateWithoutTagsInput, ReviewsUncheckedCreateWithoutTagsInput>
+  }
+
+  export type ReviewsUpsertWithWhereUniqueWithoutTagsInput = {
+    where: ReviewsWhereUniqueInput
+    update: XOR<ReviewsUpdateWithoutTagsInput, ReviewsUncheckedUpdateWithoutTagsInput>
+    create: XOR<ReviewsCreateWithoutTagsInput, ReviewsUncheckedCreateWithoutTagsInput>
+  }
+
+  export type ReviewsUpdateWithWhereUniqueWithoutTagsInput = {
+    where: ReviewsWhereUniqueInput
+    data: XOR<ReviewsUpdateWithoutTagsInput, ReviewsUncheckedUpdateWithoutTagsInput>
+  }
+
+  export type ReviewsUpdateManyWithWhereWithoutTagsInput = {
+    where: ReviewsScalarWhereInput
+    data: XOR<ReviewsUpdateManyMutationInput, ReviewsUncheckedUpdateManyWithoutTagsInput>
+  }
+
+  export type ReviewsScalarWhereInput = {
+    AND?: ReviewsScalarWhereInput | ReviewsScalarWhereInput[]
+    OR?: ReviewsScalarWhereInput[]
+    NOT?: ReviewsScalarWhereInput | ReviewsScalarWhereInput[]
+    id?: IntFilter<"Reviews"> | number
+    title?: StringFilter<"Reviews"> | string
+    summary?: StringFilter<"Reviews"> | string
+    rating?: FloatFilter<"Reviews"> | number
+    image_path?: StringNullableFilter<"Reviews"> | string | null
+    review?: StringFilter<"Reviews"> | string
+    link?: StringNullableFilter<"Reviews"> | string | null
+  }
+
+  export type ConfigurationsUpdateWithoutReviewsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
+    value?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ConfigurationsUncheckedUpdateWithoutReviewsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
+    value?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ConfigurationsUncheckedUpdateManyWithoutReviewsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
+    value?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ReviewsUpdateWithoutTagsInput = {
+    title?: StringFieldUpdateOperationsInput | string
+    summary?: StringFieldUpdateOperationsInput | string
+    rating?: FloatFieldUpdateOperationsInput | number
+    image_path?: NullableStringFieldUpdateOperationsInput | string | null
+    review?: StringFieldUpdateOperationsInput | string
+    link?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ReviewsUncheckedUpdateWithoutTagsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    summary?: StringFieldUpdateOperationsInput | string
+    rating?: FloatFieldUpdateOperationsInput | number
+    image_path?: NullableStringFieldUpdateOperationsInput | string | null
+    review?: StringFieldUpdateOperationsInput | string
+    link?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ReviewsUncheckedUpdateManyWithoutTagsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    summary?: StringFieldUpdateOperationsInput | string
+    rating?: FloatFieldUpdateOperationsInput | number
+    image_path?: NullableStringFieldUpdateOperationsInput | string | null
+    review?: StringFieldUpdateOperationsInput | string
+    link?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
 

@@ -12,7 +12,7 @@ export default function Home() {
     <>
       <TitleBar />
       <div className="pt-2 pl-4">
-        <a href="/review_page" ref={linkRef} className="hover:text-gray-400">Book Reviews</a>
+        <a href="/review_list" ref={linkRef} className="hover:text-gray-400">Book Reviews</a>
       </div>
       <DocFiles />
     </>

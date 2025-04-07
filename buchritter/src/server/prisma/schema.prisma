@@ -19,3 +19,24 @@ model Documents {
   updated_at String?
   body       Json?
 }
+
+model Reviews {
+  id         Int              @id @default(autoincrement())
+  title      String
+  summary    String
+  rating     Float
+  image_path String?
+  tags       Configurations[]
+  review     String
+  link       String?
+}
+
+model Configurations {
+  id      Int       @id @default(autoincrement())
+  name    String
+  key     String
+  value   String
+  reviews Reviews[]
+
+  @@unique([key, value])
+}

@@ -125,6 +125,23 @@ exports.Prisma.DocumentsScalarFieldEnum = {
   body: 'body'
 };
 
+exports.Prisma.ReviewsScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  summary: 'summary',
+  rating: 'rating',
+  image_path: 'image_path',
+  review: 'review',
+  link: 'link'
+};
+
+exports.Prisma.ConfigurationsScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  key: 'key',
+  value: 'value'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -153,7 +170,9 @@ exports.Prisma.NullsOrder = {
 
 
 exports.Prisma.ModelName = {
-  Documents: 'Documents'
+  Documents: 'Documents',
+  Reviews: 'Reviews',
+  Configurations: 'Configurations'
 };
 
 /**
