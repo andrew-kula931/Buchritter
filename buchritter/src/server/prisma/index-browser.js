@@ -132,7 +132,8 @@ exports.Prisma.ReviewsScalarFieldEnum = {
   rating: 'rating',
   image_path: 'image_path',
   review: 'review',
-  link: 'link'
+  link: 'link',
+  created_at: 'created_at'
 };
 
 exports.Prisma.ConfigurationsScalarFieldEnum = {

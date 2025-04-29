@@ -15,17 +15,17 @@ export const dynamic = 'force-dynamic';
 export default function DocumentPage() {
   return (
     <div className="h-screen w-[100%] flex flex-col">
-      <div className="navBar sticky top-0 z-20">
+      <nav className="navBar sticky top-0 z-20">
         <Suspense fallback={<p>Loading...</p>}>
           <DocTitle />
         </Suspense>
         <Link href="/">
-          <FaHome size={24} color="white" /> 
+          <FaHome size={24} color="white" />
         </Link>
-      </div>
+      </nav>
 
       <div className="flex-1 overflow-auto relative z-10">
-        <CanvasController/>
+        <CanvasController />
       </div>
 
     </div>

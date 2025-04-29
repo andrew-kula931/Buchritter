@@ -21,9 +21,9 @@ export default function Home() {
 
 function TitleBar() {
   return (
-    <div className="navBar">
-      <div style={{fontSize: 40}}>Buch Ritter</div>
-    </div>
+    <nav className="navBar">
+      <div style={{ fontSize: 40 }}>Buch Ritter</div>
+    </nav>
   );
 }
 
@@ -40,7 +40,7 @@ function DocFiles() {
   const dropped = useRef<number>(null);
   const sendRoot = useRef<boolean>(false);
   const [root, showRoot] = useState(false);
-  
+
   const moveFile = async () => {
     if (dragged.current != null && dropped.current != null && dropped.current != dragged.current) {
       await moveItem(dragged.current, dropped.current);
@@ -85,7 +85,7 @@ function DocFiles() {
   const createFolderHandler = async () => {
     await addDocument("folder");
     refreshPage((prev) => !prev);
-  } 
+  }
 
   const refreshList = () => {
     refreshPage((prev) => !prev);
@@ -97,37 +97,38 @@ function DocFiles() {
         <div className="flex flex-row justify-between">
           <h2 className="text-[1.65rem] pb-2">Files</h2>
           <button onClick={toggleDeleteMode} className="p-2 text-red-500 hover:text-red-700">
-            {(!deleteMode) ? <Trash size={24}/> : <X size={24} />}
+            {(!deleteMode) ? <Trash size={24} /> : <X size={24} />}
           </button>
         </div>
         <ul>
-          {loading ? <p>Loading...</p> 
-            : ( getRootItems().map((doc, idx) => (
+          {loading ? <p>Loading...</p>
+            : (getRootItems().map((doc, idx) => (
               <li key={doc.id}>
                 <div>
-                  <File 
-                    key={doc.id} 
-                    id={doc.id} 
-                    text={doc.name} 
-                    idx={idx} 
-                    deleteMode={deleteMode} 
-                    refreshList={refreshList} 
-                    type={doc.type} 
-                    updateDragged={(id: number) => { 
-                      dragged.current = id; 
+                  <File
+                    key={doc.id}
+                    id={doc.id}
+                    text={doc.name}
+                    idx={idx}
+                    deleteMode={deleteMode}
+                    refreshList={refreshList}
+                    type={doc.type}
+                    updateDragged={(id: number) => {
+                      dragged.current = id;
                       moveFile()
-                      showRoot(false); }}
+                      showRoot(false);
+                    }}
                     updateDropped={(id: number) => { dropped.current = id; moveFile() }}
                     showRoot={() => showRoot(true)}
                     documents={documents}
                   />
                 </div>
               </li>
-          ))) }
+            )))}
 
           {root && (
-            <div className="p-2 bg-gray-700" 
-              onDragOver={ e => e.preventDefault() }
+            <div className="p-2 bg-gray-700"
+              onDragOver={e => e.preventDefault()}
               onDrop={() => sendRoot.current = true}>
               Move to Root
             </div>
