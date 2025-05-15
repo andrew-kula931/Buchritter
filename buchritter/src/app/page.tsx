@@ -3,26 +3,30 @@
 import { useState, useRef, useEffect } from "react";
 import { getDocuments, addDocument, moveItem, moveToRoot } from '../server/api/requests';
 import { Trash, X } from 'lucide-react';
+import { PiBookOpenText } from "react-icons/pi";
 import File from '@/app/file';
 
 export default function Home() {
-  const linkRef = useRef<HTMLAnchorElement>(null);
-
   return (
     <>
       <TitleBar />
-      <div className="pt-2 pl-4">
-        <a href="/review_list" ref={linkRef} className="hover:text-gray-400">Book Reviews</a>
-      </div>
       <DocFiles />
     </>
   );
 }
 
 function TitleBar() {
+  const linkRef = useRef<HTMLAnchorElement>(null);
+
   return (
-    <nav className="navBar">
+    <nav className="navBar flex flex-row">
       <div style={{ fontSize: 40 }}>Buch Ritter</div>
+      <div className="flex flex-row hover:text-gray-400">
+        <div className="pt-1">
+          <PiBookOpenText />
+        </div>
+        <a href="/review_list" ref={linkRef} className="pl-2 text-xl">Reviews</a>
+      </div>
     </nav>
   );
 }
