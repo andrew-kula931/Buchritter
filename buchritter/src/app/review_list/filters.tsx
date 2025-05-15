@@ -3,15 +3,17 @@
 import { MdOutlineRefresh } from "react-icons/md";
 import { CiSearch } from "react-icons/ci";
 import { useState } from 'react';
+import { Plus } from 'lucide-react';
 import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
+
 
 const tags = ["Movie", "Manga", "Book", "Show", "Journal", "Anime", "Comic"];
 
 export default function FilterMenu() {
   const [rotate, setRotate] = useState(false);
   const [selected, setSelected] = useState("Movie");
-  const [ratings, setRatings] = useState<number[]>([0,5])
+  const [ratings, setRatings] = useState<number[]>([0,5]);
 
   const refreshSpin = () => {
     setRotate(true);
@@ -94,10 +96,11 @@ export default function FilterMenu() {
         </div>
       </div>
 
-      {/* Date Selection */}
-      <div className="flex flex-row items-center justify-between pb-4">
-        <div>Date</div>
-      </div>
+      <button className="fixed bottom-6 right-6 z-50 p-4 bg-blue-700 rounded-full 
+        shadow-lg hover:bg-blue-900 transition">
+        <Plus />
+      </button>
+
     </div>
   );
 }
