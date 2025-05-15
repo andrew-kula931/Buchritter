@@ -2,18 +2,24 @@
 
 import { MdOutlineRefresh } from "react-icons/md";
 import { CiSearch } from "react-icons/ci";
-import { PiLessThanOrEqual } from "react-icons/pi";
 import { useState } from 'react';
+import Box from '@mui/material/Box';
+import Slider from '@mui/material/Slider';
 
 const tags = ["Movie", "Manga", "Book", "Show", "Journal", "Anime", "Comic"];
 
 export default function FilterMenu() {
   const [rotate, setRotate] = useState(false);
   const [selected, setSelected] = useState("Movie");
+  const [ratings, setRatings] = useState<number[]>([0,5])
 
   const refreshSpin = () => {
     setRotate(true);
     setTimeout(() => setRotate(false), 500);
+  }
+
+  const ratingChange = (event: Event, newValue: number[]) => {
+    setRatings(newValue);
   }
 
   return (
@@ -26,11 +32,13 @@ export default function FilterMenu() {
           <button
             type="button"
             onClick={refreshSpin}
-            className="py-2 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg 
+            className="py-1 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg 
               border border-transparent text-white bg-blue-600 hover:bg-blue-700 active:scale-95 transition-transform"
           >
             <MdOutlineRefresh className={`transition-transform duration-500 ${rotate ? 'rotate-[360deg]' : ''}`} />
-            Refresh
+            <div className="pt-1">
+              Refresh
+            </div>
           </button>
         </div>
 
@@ -50,20 +58,20 @@ export default function FilterMenu() {
       {/* Rating Range */}
       <div className="flex flex-row items-center justify-between pb-4">
         <div>Rating</div>
-        <div className="flex flex-row items-center space-x-2">
-          <input
-            id="lowerRating"
-            className="py-2 pl-2 w-[50px] rounded-lg text-sm bg-gray-800"
-            placeholder="0"
-          />
-          <PiLessThanOrEqual />
-          <div>Rating</div>
-          <PiLessThanOrEqual />
-          <input
-            id="upperRating"
-            className="py-2 pl-2 w-[50px] rounded-lg text-sm bg-gray-800"
-            placeholder="5"
-          />
+        <div className="flex flex-row spacing-4">
+          <p className="pr-6 pt-1.5">{ratings[0]}</p>
+          <Box className="pr-4" sx={{width: 180}}>
+            <Slider
+              getAriaLabel={() => 'Title'} 
+              value={ratings}
+              onChange={ratingChange}
+              min={0}
+              max={5}
+              step={0.1}
+              disableSwap
+            />
+          </Box>
+          <p className="pt-1.5 w-[30px]">{ratings[1]}</p>
         </div>
       </div>
 
@@ -86,9 +94,10 @@ export default function FilterMenu() {
         </div>
       </div>
 
-
-
-      <div>Date</div>
+      {/* Date Selection */}
+      <div className="flex flex-row items-center justify-between pb-4">
+        <div>Date</div>
+      </div>
     </div>
   );
 }
