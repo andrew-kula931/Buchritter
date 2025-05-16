@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { FaHome } from 'react-icons/fa';
 import ReviewList from '@/app/review_list/review_list';
 import FilterMenu from '@/app/review_list/filters';
+import CreateReview from '@/app/review_list/create_review';
 
 export default function ReviewPage() {
   return (
@@ -14,10 +15,10 @@ export default function ReviewPage() {
         </Link>
       </nav>
 
-      {/* Placeholder div, replace with list */}
       <div className="flex flex-row w-screen">
         <FilterMenu />
         <ReviewList />
+        <CreateReview />
       </div>
     </div>
   );

@@ -9,7 +9,7 @@ export default function Review({title, rating, tags, summary, image_path}:
   const [expanded, setExpanded] = useState<boolean>();
 
   return (
-    <div className="flex flex-col w-[500px] bg-gray-600 rounded">
+    <div className="flex flex-col pt-1 pr-1 pl-1 w-[500px] bg-gray-600 rounded">
       <div className="flex flex-row justify-between items-center cursor-pointer" onClick={() => setExpanded(!expanded)}>
         <div className="flex flex-col">
           <p className="pl-1 pt-1 text-2xl">{title} - {rating.toString()}</p>
@@ -26,3 +26,4 @@ export default function Review({title, rating, tags, summary, image_path}:
     </div>
   );
 }
+

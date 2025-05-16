@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { getReview, getReviews } from "@/server/api/review_req";
 import Review from "@/app/review_list/review";
 
-// Only gets one for now
 // TODO: Fix any in useState
 export default function ReviewList() {
   const [reviews, setReviews] = useState<any[] | undefined>(undefined);
@@ -27,7 +26,7 @@ export default function ReviewList() {
   return (
     <div className="grow w-[60%] h-[80%] p-4">
       <div className="flex-grid items-start justify-center border-2 border-gray-700 rounded-sm">
-        <ul className="p-2">
+        <ul className="p-2 space-y-4">
           {loading ? <p>Loading...</p>
             : (reviews!.map((r: any, idx: number) => (
               <li key={r.id}>
