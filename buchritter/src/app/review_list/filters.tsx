@@ -12,7 +12,7 @@ const tags = ["Movie", "Manga", "Book", "Show", "Journal", "Anime", "Comic"];
 
 export default function FilterMenu() {
   const [rotate, setRotate] = useState(false);
-  const [selected, setSelected] = useState("Movie");
+  const [selected, setSelected] = useState<string[]>(["Movie"]);
   const [ratings, setRatings] = useState<number[]>([0,5]);
 
   const refreshSpin = () => {
@@ -84,8 +84,14 @@ export default function FilterMenu() {
           {tags.map((tag) => (
             <button
               key={tag}
-              onClick={() => setSelected(tag)}
-              className={`px-4 py-1 rounded-md text-sm ${selected === tag
+              onClick={() => 
+                setSelected((prevSelected) =>
+                  prevSelected.includes(tag)
+                    ? prevSelected.filter((t) => t !== tag)
+                    : [...prevSelected, tag]
+                )
+              }
+              className={`px-4 py-1 rounded-md text-sm ${selected.includes(tag)
                 ? "bg-blue-600 text-white"
                 : 'bg-gray-400 text-gray-800 hover:bg-gray-300'
                 }`}
@@ -95,12 +101,6 @@ export default function FilterMenu() {
           ))}
         </div>
       </div>
-
-      <button className="fixed bottom-6 right-6 z-50 p-4 bg-blue-700 rounded-full 
-        shadow-lg hover:bg-blue-900 transition">
-        <Plus />
-      </button>
-
     </div>
   );
 }
