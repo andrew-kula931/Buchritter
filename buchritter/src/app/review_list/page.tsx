@@ -4,8 +4,11 @@ import { FaHome } from 'react-icons/fa';
 import ReviewList from '@/app/review_list/review_list';
 import FilterMenu from '@/app/review_list/filters';
 import CreateReview from '@/app/review_list/create_review';
+import { getTags } from '@/server/api/review_req';
 
-export default function ReviewPage() {
+export default async function ReviewPage() {
+  const tags = await getTags();
+
   return (
     <div className="h-screen w-[100%] flex flex-col">
       <nav className="navBar sticky top-0 z-20">
@@ -16,9 +19,9 @@ export default function ReviewPage() {
       </nav>
 
       <div className="flex flex-row w-screen">
-        <FilterMenu />
+        <FilterMenu tags={tags.map((t) => t.value)} />
         <ReviewList />
-        <CreateReview />
+        <CreateReview tags={tags} />
       </div>
     </div>
   );

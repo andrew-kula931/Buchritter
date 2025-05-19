@@ -13,7 +13,7 @@ export default function Review({title, rating, tags, summary, image_path}:
       <div className="flex flex-row justify-between items-center cursor-pointer" onClick={() => setExpanded(!expanded)}>
         <div className="flex flex-col">
           <p className="pl-1 pt-1 text-2xl">{title} - {rating.toString()}</p>
-          <p className="pl-2 pb-1 text-sm">{tags}</p>
+          <p className="pl-2 pb-1 text-sm">{tags.join(", ")}</p>
         </div>
         <img className="p-1" src={image_path} alt={"Placeholder Image"}></img> 
       </div>

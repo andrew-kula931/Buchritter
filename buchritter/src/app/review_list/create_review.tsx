@@ -5,14 +5,15 @@ import TextField from '@mui/material/TextField';
 import Slider from '@mui/material/Slider';
 import { Plus } from 'lucide-react';
 import { FaRegStar } from "react-icons/fa";
-import { addReview } from '@/server/api/review_req';
+import { addReview, Review, Configurations } from '@/server/api/review_req';
 
 type ModalProps = {
     isOpen: boolean;
     onClose: () => void;
+    tagConfigs?: Configurations[];
 }
 
-export default function CreateReview() {
+export default function CreateReview({ tags }: { tags: Configurations[] }) {
     const [isOpen, toggleModal] = useState(false);
 
     return(
@@ -24,19 +25,20 @@ export default function CreateReview() {
             <CreateModal 
                 isOpen={isOpen}
                 onClose={() => toggleModal(false)} 
+                tagConfigs={tags}
             />
         </div>
     );
 }
 
-function CreateModal({ isOpen, onClose}: ModalProps) {
+function CreateModal({ isOpen, onClose, tagConfigs }: ModalProps) {
     if (!isOpen) return null;
-    const [title, setTitle] = useState<string>();
-    const [summary, setSummary] = useState<string>();
+    const [title, setTitle] = useState<string>("");
+    const [summary, setSummary] = useState<string>("");
     const [rating, setRating] = useState<number>(0);
-    const [review, setReview] = useState<string>();
-    const [selected, setSelected] = useState<string[]>(["Movie"]);
-    const tags = ["Movie", "Manga", "Book", "Show", "Journal", "Anime", "Comic"];
+    const [review, setReview] = useState<string>("");
+    const [selected, setSelected] = useState<string[]>([]);
+    const tags: string[] = (tagConfigs ?? []).map((t: Configurations) => t.value);
 
     const ratingChange = (event: Event, newValue: number) => {
         setRating(newValue);
@@ -84,6 +86,10 @@ function CreateModal({ isOpen, onClose}: ModalProps) {
                         {tags.map((tag) => (
                             <button
                                 key={tag} 
+                                className={`px-4 py-1 rounded-md text-sm ${selected.includes(tag)
+                                    ? "bg-blue-600 text-white"
+                                    : 'bg-gray-400 text-gray-800 hover:bg-gray-300'
+                                    }`}
                                 onClick={() => {
                                     setSelected((prev) => 
                                         prev.includes(tag) 
@@ -92,10 +98,6 @@ function CreateModal({ isOpen, onClose}: ModalProps) {
 
                                     )
                                 }}
-                                className={`px-4 py-1 rounded-md text-sm ${selected.includes(tag)
-                                    ? "bg-blue-600 text-white"
-                                    : 'bg-gray-400 text-gray-800 hover:bg-gray-300'
-                                    }`}
                             >
                                 {tag}
                             </button>
@@ -119,9 +121,14 @@ function CreateModal({ isOpen, onClose}: ModalProps) {
                         className="mt-4 px-3 py-1 bg-gray-500 rounded hover:bg-gray-600">
                         Close
                     </button>
+
+                    {/* image_path and link currently unavailable */}
                     <button 
                         onClick={() => {
-                            /* Set up add review here */
+                            const newReview: Review = { title, summary, rating, review, image_path: undefined, link: undefined, 
+                                tags: (tagConfigs ?? []).filter((t) => selected.includes(t.value)).map((ta) => ta.id) }
+                            addReview(newReview);
+                            onClose();
                         }} 
                         className="mt-4 px-3 py-1 bg-blue-500 rounded hover:bg-blue-600">
                         Create

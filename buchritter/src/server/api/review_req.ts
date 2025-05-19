@@ -1,10 +1,10 @@
 "use server";
 
-import { Prisma, PrismaClient } from "@/server/prisma";
+import { PrismaClient } from "@/server/prisma";
 
 const prisma = new PrismaClient();
 
-type Review = {
+export type Review = {
   title: string;
   summary: string;
   rating: number;
@@ -13,6 +13,13 @@ type Review = {
   link?: string;
   tags: number[];
 };
+
+export type Configurations = {
+  id: number;
+  name: string;
+  key: string;
+  value: string;
+}
 
 export async function getReview(id: number) {
   return await prisma.reviews.findFirst({
@@ -50,4 +57,12 @@ export async function addReview(input: Review){
     },
     include: { tags: true },
   });
+}
+
+export async function getTags() {
+  return await prisma.configurations.findMany({
+    where: {
+      name: 'review.tag'
+    }
+  })
 }

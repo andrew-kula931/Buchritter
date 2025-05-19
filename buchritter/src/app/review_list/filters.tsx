@@ -3,16 +3,12 @@
 import { MdOutlineRefresh } from "react-icons/md";
 import { CiSearch } from "react-icons/ci";
 import { useState } from 'react';
-import { Plus } from 'lucide-react';
 import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
 
-
-const tags = ["Movie", "Manga", "Book", "Show", "Journal", "Anime", "Comic"];
-
-export default function FilterMenu() {
+export default function FilterMenu({ tags }: { tags: string[] }) {
   const [rotate, setRotate] = useState(false);
-  const [selected, setSelected] = useState<string[]>(["Movie"]);
+  const [selected, setSelected] = useState<string[]>([]);
   const [ratings, setRatings] = useState<number[]>([0,5]);
 
   const refreshSpin = () => {
