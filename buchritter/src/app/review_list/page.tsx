@@ -1,13 +1,14 @@
 import Link from 'next/link';
 
 import { FaHome } from 'react-icons/fa';
-import ReviewList from '@/app/review_list/review_list';
-import FilterMenu from '@/app/review_list/filters';
-import CreateReview from '@/app/review_list/create_review';
+import ReviewDetails from '@/app/review_list/review_details';
+import ReviewListController from '@/app/review_list/list_controller';
+import { getReviews, Review } from '@/server/api/review_req';
 import { getTags } from '@/server/api/review_req';
 
 export default async function ReviewPage() {
   const tags = await getTags();
+  const res = await getReviews() as unknown as Review[];
 
   return (
     <div className="h-screen w-[100%] flex flex-col">
@@ -19,9 +20,8 @@ export default async function ReviewPage() {
       </nav>
 
       <div className="flex flex-row w-screen">
-        <FilterMenu tags={tags.map((t) => t.value)} />
-        <ReviewList />
-        <CreateReview tags={tags} />
+        <ReviewListController tags={tags.map((t) => t.value)} reviews={res} />
+        <ReviewDetails tags={tags} />
       </div>
     </div>
   );
