@@ -5,8 +5,7 @@ import { Transforms, createEditor, Descendant, Element, BaseEditor, Editor } fro
 import { Slate, Editable, withReact, ReactEditor, RenderElementProps } from "slate-react";
 import { withHistory, HistoryEditor } from 'slate-history'
 import { EditorState } from './canvas_controller';
-import { getDoc, updateDocument } from '../../server/api/requests';
-import { JsonValue } from "@prisma/client/runtime/library";
+import { getDoc, updateDocument, Document } from '../../server/api/requests';
 
 //Styling of the text area
 export const docStyle = {
@@ -26,13 +25,6 @@ export const docStyle = {
 //Typescript interfacing
 type CustomElement = { type: 'paragraph' | 'code' | 'bulleted-list' | 'numbered-list'; align?: 'left' | 'center' | 'right'; children: CustomText[] };
 type CustomText = { text: string; bold?: boolean; italic?: boolean; underline?: boolean; lineThrough?: boolean}
-type Document = {
-  id: number;
-  name: string;
-  created_at: string;
-  updated_at: string | null;
-  body: JsonValue;
-} | null
 
 declare module 'slate' {
   interface CustomTypes {
@@ -47,12 +39,12 @@ declare module 'slate' {
  * State refers to the object containing all configurable values:
  * @param - Bold, Italic, Underline, Bulleted List, Numbered List, Code
  */
-export function RichTextEditor({ state, updateVisualState, visualState, docId }:
+export function RichTextEditor({ state, updateVisualState, visualState, docRef }:
    { state: EditorState; updateVisualState: (key: any, value: boolean | string) => void; 
-    visualState: EditorState; docId: number }) {
+    visualState: EditorState; docRef: Document }) {
 
   // Page state variables and setup
-  const [doc, updateDoc] = useState<Document | null>(null);
+  const [doc, updateDoc] = useState<Document>(docRef);
   const [value, setValue] = useState<Descendant[]>([
     { type: 'paragraph', children: [{ text: ''}]}
   ]);
@@ -68,16 +60,7 @@ export function RichTextEditor({ state, updateVisualState, visualState, docId }:
     state.align = "left";
   }
 
-  // The following two effects pulls information from the database and displays it on the canvas
-  useEffect(() => {
-    const fetchData = async () => {
-      const document: Document = await getDoc(docId);
-      updateDoc(document);
-    };
-
-    fetchData();
-  }, []);
-
+  // Displays the content onto the canvas
   useEffect(() => {
     if (doc) {
       if (doc.body) {
@@ -89,6 +72,7 @@ export function RichTextEditor({ state, updateVisualState, visualState, docId }:
     }
   }, [doc]);
 
+  // Initializes the editor and applies history configurations
   const editor = useMemo(() => withHistory(withReact(createEditor())), []);
 
 

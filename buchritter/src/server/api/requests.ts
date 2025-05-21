@@ -1,8 +1,17 @@
 "use server";
 
 import { Prisma, PrismaClient } from "@/server/prisma";
+import { JsonValue } from "@prisma/client/runtime/library";
 
 const prisma = new PrismaClient();
+
+export type Document = {
+  id: number;
+  name: string;
+  created_at: string;
+  updated_at: string | null;
+  body: JsonValue;
+} | null
 
 export async function getDoc(id: number) {
   const doc = await prisma.documents.findFirst({

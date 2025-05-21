@@ -1,30 +1,17 @@
 'use client'
 
-import { useSearchParams } from "next/navigation";
-import { getDoc, updateName } from "@/server/api/requests";
+import { updateName } from "@/server/api/requests";
 import { useEffect, useState, useRef } from "react";
 
 /**
- * Title box that draws the name of the document from the searchParam 'id'. 
+ * Title bar at the top of the document page
  * 
  * Can be edited and saves automatically.
  */
-export default function DocTitle() {
-  const searchParams = useSearchParams();
-  const docId = searchParams.get("id") ?? 0;
-
-  const [name, setName] = useState("");
+export default function DocTitle({ docId, title }: { docId: number, title: string }) {
+  const [name, setName] = useState<string>(title);
   const initRender = useRef(true);
   const saveTimeout = useRef<NodeJS.Timeout | null>(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const document = await getDoc(Number(docId));
-      setName(document?.name || "Untitled");
-    };
-
-    fetchData();
-  }, []);
 
   useEffect(() => {
     if (initRender.current) {

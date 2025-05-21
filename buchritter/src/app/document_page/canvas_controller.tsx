@@ -3,7 +3,7 @@
 import { ToolBar } from "./toolbar";
 import { RichTextEditor } from "./canvas";
 import React, { useState } from "react";
-import { useSearchParams } from 'next/navigation';
+import { Document } from '@/server/api/requests';
 
 /**
  * Bold -> Boolean
@@ -38,10 +38,7 @@ export interface EditorState {
  * 
  * Requires an 'id' parameter in the page url to retrieve proper document information.
  */
-export default function CanvasController() {
-  const searchParams = useSearchParams();
-  const docId = searchParams.get("id") ?? 0;
-
+export default function CanvasController({ docRef }: { docRef: Document }) {
   const [state, setState] = useState<EditorState>({
     bold: false,
     italic: false,
@@ -78,7 +75,7 @@ export default function CanvasController() {
         <ToolBar updateState={updateState} state={state} updateVisualState={updateVisualState} visualState={visualState}/>
       </div>
       <div className="overflow-auto overscroll-contain">
-        <RichTextEditor state={state} updateVisualState={updateVisualState} visualState={visualState} docId={Number(docId)}/>
+        <RichTextEditor state={state} updateVisualState={updateVisualState} visualState={visualState} docRef={docRef}/>
       </div>
     </div>
   );
