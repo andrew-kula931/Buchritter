@@ -1,37 +1,36 @@
 "use client"
 
-import { useState } from 'react';
-import TextField from '@mui/material/TextField';
-import Slider from '@mui/material/Slider';
-import { Plus } from 'lucide-react';
+import { useState, useEffect } from 'react';
 import { FaRegStar } from "react-icons/fa";
 import { addReview, Review, Configurations } from '@/server/api/review_req';
+import TextField from '@mui/material/TextField';
+import Slider from '@mui/material/Slider';
+import FloatingAddIcon from '@/app/components/add_icon';
 
 type ModalProps = {
     isOpen: boolean;
     onClose: () => void;
     tagConfigs?: Configurations[];
+    reviewRef?: Review;
 }
 
-export default function CreateReview({ tags }: { tags: Configurations[] }) {
+export default function ReviewDetails({ tags, reviewRef }: { tags: Configurations[], reviewRef?: Review }) {
     const [isOpen, toggleModal] = useState(false);
 
     return(
         <div>
-            <FloatingAddIcon 
-                isOpen={isOpen} 
-                onClose={() => toggleModal(true)}
-            />
+            <FloatingAddIcon onClick={() => toggleModal(true)} />
             <CreateModal 
                 isOpen={isOpen}
                 onClose={() => toggleModal(false)} 
                 tagConfigs={tags}
+                reviewRef={reviewRef}
             />
         </div>
     );
 }
 
-function CreateModal({ isOpen, onClose, tagConfigs }: ModalProps) {
+function CreateModal({ isOpen, onClose, tagConfigs, reviewRef }: ModalProps) {
     if (!isOpen) return null;
     const [title, setTitle] = useState<string>("");
     const [summary, setSummary] = useState<string>("");
@@ -39,6 +38,16 @@ function CreateModal({ isOpen, onClose, tagConfigs }: ModalProps) {
     const [review, setReview] = useState<string>("");
     const [selected, setSelected] = useState<string[]>([]);
     const tags: string[] = (tagConfigs ?? []).map((t: Configurations) => t.value);
+
+    useEffect(() => {
+        if (reviewRef) {
+           setTitle(reviewRef.title);
+           setSummary(reviewRef.summary);
+           setRating(reviewRef.rating);
+           setReview(reviewRef.review);
+           setSelected(tagConfigs?.filter((t) => reviewRef.tags.map((m) => m.id).includes(t.id)).map((t) => t.value) ?? []); 
+        }
+    }, []);
 
     const ratingChange = (event: Event, newValue: number) => {
         setRating(newValue);
@@ -95,7 +104,6 @@ function CreateModal({ isOpen, onClose, tagConfigs }: ModalProps) {
                                         prev.includes(tag) 
                                             ? prev.filter((t) => t !== tag)
                                             : [...prev, tag]
-
                                     )
                                 }}
                             >
@@ -125,8 +133,12 @@ function CreateModal({ isOpen, onClose, tagConfigs }: ModalProps) {
                     {/* image_path and link currently unavailable */}
                     <button 
                         onClick={() => {
-                            const newReview: Review = { title, summary, rating, review, image_path: undefined, link: undefined, 
-                                tags: (tagConfigs ?? []).filter((t) => selected.includes(t.value)).map((ta) => ta.id) }
+                            const newReview: Review = {
+                                title, summary, rating, review, image_path: undefined, link: undefined,
+                                tags: (tagConfigs ?? []).filter((t) => selected.includes(t.value)),
+                                id: 0,
+                                created_at: new Date()
+                            }
                             addReview(newReview);
                             onClose();
                         }} 
@@ -136,16 +148,5 @@ function CreateModal({ isOpen, onClose, tagConfigs }: ModalProps) {
                 </div>
             </div>
         </div>
-    );
-}
-
-function FloatingAddIcon({ isOpen, onClose}: ModalProps) {
-    return(
-        <button 
-            onClick={() => onClose()}
-            className="fixed bottom-6 right-6 z-50 p-4 bg-blue-700 rounded-full 
-            shadow-lg hover:bg-blue-900 transition">
-            <Plus />
-        </button>
     );
 }

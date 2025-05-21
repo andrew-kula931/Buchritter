@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-export default function Review({title, rating, tags, summary, image_path}: 
+export default function ReviewTile({title, rating, tags, summary, image_path}: 
   {title: String, rating: number, tags: String[], summary: String, image_path: string | undefined}) 
   {
 

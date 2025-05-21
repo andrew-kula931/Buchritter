@@ -5,13 +5,15 @@ import { PrismaClient } from "@/server/prisma";
 const prisma = new PrismaClient();
 
 export type Review = {
+  id: number;
   title: string;
   summary: string;
   rating: number;
-  review: string;
   image_path?: string;
+  review: string;
   link?: string;
-  tags: number[];
+  created_at: Date;
+  tags: Configurations[];
 };
 
 export type Configurations = {
@@ -52,7 +54,7 @@ export async function addReview(input: Review){
       image_path: image_path,
       link: link,
       tags: {
-        connect: tags.map((id)=> ({ id })),
+        connect: tags.map((t) => ({ id: t.id })),
       },
     },
     include: { tags: true },
