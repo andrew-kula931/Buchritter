@@ -7,7 +7,7 @@ export default function ReviewTile({id, title, rating, tags, summary, image_path
   {id: number, title: String, rating: number, tags: String[], summary: String, image_path: string | undefined, editClick: (id: number) => void }) 
   {
 
-  const [expanded, setExpanded] = useState<boolean>();
+  const [expanded, setExpanded] = useState<boolean>(false);
   const [editIcon, setEditIcon] = useState<boolean>(false);
 
   return (
@@ -30,6 +30,8 @@ export default function ReviewTile({id, title, rating, tags, summary, image_path
         </div>
         <img className="p-1" src={image_path} alt={"Placeholder Image"}></img> 
       </div>
+
+      {/* Bottom menu that is only opened when the review tile is clicked */}
       {expanded &&
         <div className="p-1">
           <hr></hr>

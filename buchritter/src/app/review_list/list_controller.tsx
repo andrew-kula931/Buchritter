@@ -22,24 +22,34 @@ export default function ReviewListController({ tags, reviews }: { tags: Configur
 
     return (
         <div className="flex flex-row w-screen">
-            <FilterMenu tags={tags.map((t) => t.value)} />
+            <FilterMenu 
+                tags={tags.map((t) => t.value)} 
+            />
 
-            <ReviewList reviews={allReviews ?? reviews} editCallback={(id: number) => {
-                currentReview.current = reviews.filter((r) => r.id == id)[0];
-                setModal(true);
-            }} />
+            <ReviewList 
+                reviews={allReviews ?? reviews} 
+                editCallback={(id: number) => {
+                    currentReview.current = reviews.filter((r) => r.id == id)[0];
+                    setModal(true);
+                }} 
+            />
             
-            <ReviewDetails isOpen={modal} tagConfigs={tags} reviewRef={currentReview.current ?? undefined}
+            <ReviewDetails 
+                isOpen={modal} 
+                tagConfigs={tags} 
+                reviewRef={currentReview.current ?? undefined}
                 onClose={(update: boolean) => {
                     handleUpdate(update);
                     setModal(false);
                 }}
             />
 
-            <FloatingAddIcon onClick={() => {
-                currentReview.current = undefined;
-                setModal(true);
-            }}/>
+            <FloatingAddIcon 
+                onClick={() => {
+                    currentReview.current = undefined;
+                    setModal(true);
+                }}
+            />
         </div>
     );
 }

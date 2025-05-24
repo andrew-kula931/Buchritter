@@ -35,7 +35,7 @@ export default function ReviewDetails({ isOpen, onClose, tagConfigs, reviewRef }
         setRating(newValue);
     }
 
-    // Does not render unless prompted
+    // Does not render unless prompted for
     if (!isOpen) return null;
 
     return (
