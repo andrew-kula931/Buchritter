@@ -2,41 +2,23 @@
 
 import { useState, useEffect } from 'react';
 import { FaRegStar } from "react-icons/fa";
-import { addReview, Review, Configurations } from '@/server/api/review_req';
+import { addReview, updateReview, Review, Configurations } from '@/server/api/review_req';
 import TextField from '@mui/material/TextField';
 import Slider from '@mui/material/Slider';
-import FloatingAddIcon from '@/app/components/add_icon';
 
 type ModalProps = {
     isOpen: boolean;
-    onClose: () => void;
+    onClose: (update: boolean) => void;
     tagConfigs?: Configurations[];
     reviewRef?: Review;
 }
 
-export default function ReviewDetails({ tags, reviewRef }: { tags: Configurations[], reviewRef?: Review }) {
-    const [isOpen, toggleModal] = useState(false);
-
-    return(
-        <div>
-            <FloatingAddIcon onClick={() => toggleModal(true)} />
-            <CreateModal 
-                isOpen={isOpen}
-                onClose={() => toggleModal(false)} 
-                tagConfigs={tags}
-                reviewRef={reviewRef}
-            />
-        </div>
-    );
-}
-
-function CreateModal({ isOpen, onClose, tagConfigs, reviewRef }: ModalProps) {
-    if (!isOpen) return null;
-    const [title, setTitle] = useState<string>("");
-    const [summary, setSummary] = useState<string>("");
-    const [rating, setRating] = useState<number>(0);
-    const [review, setReview] = useState<string>("");
-    const [selected, setSelected] = useState<string[]>([]);
+export default function ReviewDetails({ isOpen, onClose, tagConfigs, reviewRef }: ModalProps) {
+    const [title, setTitle] = useState<string>(reviewRef?.title ?? "");
+    const [summary, setSummary] = useState<string>(reviewRef?.summary ?? "");
+    const [rating, setRating] = useState<number>(reviewRef?.rating ?? 0);
+    const [review, setReview] = useState<string>(reviewRef?.review ?? "");
+    const [selected, setSelected] = useState<string[]>(reviewRef?.tags.map((t) => t.value) ?? []);
     const tags: string[] = (tagConfigs ?? []).map((t: Configurations) => t.value);
 
     useEffect(() => {
@@ -47,11 +29,14 @@ function CreateModal({ isOpen, onClose, tagConfigs, reviewRef }: ModalProps) {
            setReview(reviewRef.review);
            setSelected(tagConfigs?.filter((t) => reviewRef.tags.map((m) => m.id).includes(t.id)).map((t) => t.value) ?? []); 
         }
-    }, []);
+    }, [isOpen]);
 
     const ratingChange = (event: Event, newValue: number) => {
         setRating(newValue);
     }
+
+    // Does not render unless prompted
+    if (!isOpen) return null;
 
     return (
         <div className="fixed inset-0 flex justify-center items-center z-50">
@@ -125,7 +110,7 @@ function CreateModal({ isOpen, onClose, tagConfigs, reviewRef }: ModalProps) {
                 {/* Close and create buttons */}
                 <div className="flex flex-row justify-end space-x-2">
                     <button
-                        onClick={onClose}
+                        onClick={() => onClose(false)}
                         className="mt-4 px-3 py-1 bg-gray-500 rounded hover:bg-gray-600">
                         Close
                     </button>
@@ -133,17 +118,27 @@ function CreateModal({ isOpen, onClose, tagConfigs, reviewRef }: ModalProps) {
                     {/* image_path and link currently unavailable */}
                     <button 
                         onClick={() => {
-                            const newReview: Review = {
-                                title, summary, rating, review, image_path: undefined, link: undefined,
-                                tags: (tagConfigs ?? []).filter((t) => selected.includes(t.value)),
-                                id: 0,
-                                created_at: new Date()
+                            if (reviewRef) {
+                                const updatingReview: Review = {
+                                    title, summary, rating, review, image_path: undefined, link: undefined,
+                                    tags: (tagConfigs ?? []).filter((t) => selected.includes(t.value)),
+                                    id: reviewRef.id, created_at: new Date(),
+                                }
+                                updateReview(updatingReview);
+                            } else {
+                                const newReview: Review = {
+                                    title, summary, rating, review, image_path: undefined, link: undefined,
+                                    tags: (tagConfigs ?? []).filter((t) => selected.includes(t.value)),
+                                    id: 0,
+                                    created_at: new Date()
+                                }
+                                addReview(newReview);
                             }
-                            addReview(newReview);
-                            onClose();
+
+                            onClose(true);
                         }} 
                         className="mt-4 px-3 py-1 bg-blue-500 rounded hover:bg-blue-600">
-                        Create
+                        {reviewRef ? "Update": "Create"}
                     </button>
                 </div>
             </div>

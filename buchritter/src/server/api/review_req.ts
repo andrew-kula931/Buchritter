@@ -61,6 +61,28 @@ export async function addReview(input: Review){
   });
 }
 
+export async function updateReview(input: Review) {
+  const { title, summary, rating, review, image_path, link, tags } = input;
+
+  return await prisma.reviews.update({
+    where: {
+      id: input.id
+    },
+    data: {
+      title: title,
+      summary: summary ?? '',
+      rating: rating,
+      review: review,
+      image_path: image_path,
+      link: link,
+      tags: {
+        connect: tags.map((t) => ({ id: t.id })),
+      },
+    },
+    include: { tags: true },
+  });
+}
+
 export async function getTags() {
   return await prisma.configurations.findMany({
     where: {

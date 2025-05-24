@@ -3,7 +3,6 @@
 import Link from 'next/link';
 
 import { FaHome } from 'react-icons/fa';
-import ReviewDetails from '@/app/review_list/review_details';
 import ReviewListController from '@/app/review_list/list_controller';
 import { getReviews, Review } from '@/server/api/review_req';
 import { getTags } from '@/server/api/review_req';
@@ -22,8 +21,7 @@ export default async function ReviewPage() {
       </nav>
 
       <div className="flex flex-row w-screen">
-        <ReviewListController tags={tags.map((t) => t.value)} reviews={res} />
-        <ReviewDetails tags={tags} />
+        <ReviewListController tags={tags} reviews={res} />
       </div>
     </div>
   );
