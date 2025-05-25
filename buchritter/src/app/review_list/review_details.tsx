@@ -23,12 +23,18 @@ export default function ReviewDetails({ isOpen, onClose, tagConfigs, reviewRef }
 
     useEffect(() => {
         if (reviewRef) {
-           setTitle(reviewRef.title);
-           setSummary(reviewRef.summary);
-           setRating(reviewRef.rating);
-           setReview(reviewRef.review);
-           setSelected(tagConfigs?.filter((t) => reviewRef.tags.map((m) => m.id).includes(t.id)).map((t) => t.value) ?? []); 
-        }
+            setTitle(reviewRef.title);
+            setSummary(reviewRef.summary);
+            setRating(reviewRef.rating);
+            setReview(reviewRef.review);
+            setSelected(tagConfigs?.filter((t) => reviewRef.tags.map((m) => m.id).includes(t.id)).map((t) => t.value) ?? []); 
+        } else {
+            setTitle("");
+            setSummary("");
+            setRating(0);
+            setReview("");
+            setSelected([]); 
+        } 
     }, [isOpen]);
 
     const ratingChange = (event: Event, newValue: number) => {
@@ -110,7 +116,9 @@ export default function ReviewDetails({ isOpen, onClose, tagConfigs, reviewRef }
                 {/* Close and create buttons */}
                 <div className="flex flex-row justify-end space-x-2">
                     <button
-                        onClick={() => onClose(false)}
+                        onClick={() => {
+                            onClose(false);
+                        }}
                         className="mt-4 px-3 py-1 bg-gray-500 rounded hover:bg-gray-600">
                         Close
                     </button>
