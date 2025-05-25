@@ -15,7 +15,7 @@ import { getDoc } from '@/server/api/requests';
  * CanvasController child component requires an 'id' in page url for document retreival.
  */
 export default async function DocumentPage({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined }}) {
-  const docId: number = await Number(searchParams.id);
+  const docId: number = Number(searchParams.id);
   const doc = await getDoc(docId);
 
   return (

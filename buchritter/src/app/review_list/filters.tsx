@@ -6,10 +6,13 @@ import { useState } from 'react';
 import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
 
-export default function FilterMenu({ tags }: { tags: string[] }) {
+export default function FilterMenu({ tags, refreshList }: 
+    { tags: string[], refreshList: (ratings: number[], selected: string[], search: string) => void }) 
+  {
   const [rotate, setRotate] = useState(false);
   const [selected, setSelected] = useState<string[]>([]);
   const [ratings, setRatings] = useState<number[]>([0,5]);
+  const [search, setSearch] = useState<string>("");
 
   const refreshSpin = () => {
     setRotate(true);
@@ -18,6 +21,10 @@ export default function FilterMenu({ tags }: { tags: string[] }) {
 
   const ratingChange = (event: Event, newValue: number[]) => {
     setRatings(newValue);
+  }
+
+  const handleRefreshRequest = () => {
+    refreshList(ratings, selected, (search.length === 0) ? "%" : search)
   }
 
   return (
@@ -29,7 +36,10 @@ export default function FilterMenu({ tags }: { tags: string[] }) {
           <div className="text-xl">Filters</div>
           <button
             type="button"
-            onClick={refreshSpin}
+            onClick={() => {
+              refreshSpin();
+              handleRefreshRequest();
+            }}
             className="py-1 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg 
               border border-transparent text-white bg-blue-600 hover:bg-blue-700 active:scale-95 transition-transform"
           >
@@ -45,6 +55,13 @@ export default function FilterMenu({ tags }: { tags: string[] }) {
           <div className="space-y-3 relative">
             <CiSearch className="absolute h-[30px] w-[30px] pl-3 pt-3 text-gray-500" />
             <input
+              value={search ?? ""}
+              onChange={e => setSearch(e.target.value)}
+              onKeyDown={(k) => {
+                if (k.key === 'Enter') {
+                  handleRefreshRequest();
+                }
+              }}
               type="text"
               className="py-3 pl-10 px-4 w-full rounded-lg text-sm bg-gray-800"
               placeholder="Search"
@@ -57,8 +74,8 @@ export default function FilterMenu({ tags }: { tags: string[] }) {
       <div className="flex flex-row items-center justify-between pb-4">
         <div>Rating</div>
         <div className="flex flex-row spacing-4">
-          <p className="pr-6 pt-1.5">{ratings[0]}</p>
-          <Box className="pr-4" sx={{width: 180}}>
+          <p className="pr-6 pl-1 pt-1.5 w-[40px]">{ratings[0]}</p>
+          <Box className="pr-4" sx={{width: 170}}>
             <Slider
               getAriaLabel={() => 'Title'} 
               value={ratings}
@@ -80,12 +97,13 @@ export default function FilterMenu({ tags }: { tags: string[] }) {
           {tags.map((tag) => (
             <button
               key={tag}
-              onClick={() => 
+              onClick={() => {
                 setSelected((prevSelected) =>
                   prevSelected.includes(tag)
                     ? prevSelected.filter((t) => t !== tag)
                     : [...prevSelected, tag]
                 )
+              }
               }
               className={`px-4 py-1 rounded-md text-sm ${selected.includes(tag)
                 ? "bg-blue-600 text-white"

@@ -138,7 +138,7 @@ export default function File({ id, text, idx, deleteMode, refreshList, type, upd
         onDrag={showRoot}
         onDragEnd={() => updateDragged(id)}
         >
-        <a href={`/document_page?id=${id}`} ref={linkRef} style={{ display: 'none'}}>To Doc</a>
+        <a href={`/document_page?id=${id}`} ref={linkRef}></a>
         {text}
       </div> :
       <div>

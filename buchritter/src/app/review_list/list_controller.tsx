@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useRef } from 'react';
-import { Review, Configurations, getReviews } from '@/server/api/review_req';
+import { Review, Configurations, getReviews, getFilteredReviews } from '@/server/api/review_req';
 import ReviewList from '@/app/review_list/review_list';
 import FilterMenu from '@/app/review_list/filters';
 import ReviewDetails from '@/app/review_list/review_details';
@@ -20,10 +20,16 @@ export default function ReviewListController({ tags, reviews }: { tags: Configur
         }
     }
 
+    const handleFilter = async (ratings: number[] , selected: string[] , search?: string) => {
+        const filteredReviews = await getFilteredReviews(search ?? "", ratings[0], ratings[1], selected) as unknown as Review[];
+        setReviews(filteredReviews);
+    }
+
     return (
         <div className="flex flex-row w-screen">
             <FilterMenu 
                 tags={tags.map((t) => t.value)} 
+                refreshList={handleFilter}
             />
 
             <ReviewList 

@@ -42,6 +42,54 @@ export async function getReviews() {
   });
 }
 
+export async function getFilteredReviews(
+  search: string, ratingLow: number, ratingHigh: number, tags: string[]
+) {
+  let tagFilter = {};
+  if (tags.length > 0) {
+    tagFilter = {
+      tags: {
+        some: {
+          value: {
+            in: tags
+          }
+        }
+      }
+    }
+  } 
+
+  return await prisma.reviews.findMany({
+    where: {
+      AND: [
+        {
+          OR: [
+            { 
+              title: { 
+                contains: search 
+              } 
+            },
+            { 
+              summary: { 
+                contains: search 
+              } 
+            },
+          ],
+        },
+        {
+          rating: {
+            gte: ratingLow,
+            lte: ratingHigh,
+          },
+        },
+        tagFilter,
+      ],
+    },
+    include: {
+      tags: true,
+    },
+  });
+}
+
 export async function addReview(input: Review){
   const { title, summary, rating, review, image_path, link, tags } = input;
 
