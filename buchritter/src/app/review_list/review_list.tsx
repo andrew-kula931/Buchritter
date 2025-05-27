@@ -16,12 +16,7 @@ export default function ReviewList({ reviews, editCallback }: { reviews: Review[
               <li key={r.id}>
                 <div>
                   <ReviewTile
-                    id={r.id}
-                    title={r.title}
-                    rating={r.rating}
-                    tags={r.tags.map((tag: any) => tag.value)}
-                    summary={r.summary}
-                    image_path={r.image_path}
+                    reviewRef={r}
                     editClick={handleReviewClick}
                   />
                 </div>

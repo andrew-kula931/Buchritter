@@ -18,6 +18,7 @@ export default function ReviewDetails({ isOpen, onClose, tagConfigs, reviewRef }
     const [summary, setSummary] = useState<string>(reviewRef?.summary ?? "");
     const [rating, setRating] = useState<number>(reviewRef?.rating ?? 0);
     const [review, setReview] = useState<string>(reviewRef?.review ?? "");
+    const [link, setLink] = useState<string>(reviewRef?.link ?? "");
     const [selected, setSelected] = useState<string[]>(reviewRef?.tags.map((t) => t.value) ?? []);
     const tags: string[] = (tagConfigs ?? []).map((t: Configurations) => t.value);
 
@@ -27,12 +28,14 @@ export default function ReviewDetails({ isOpen, onClose, tagConfigs, reviewRef }
             setSummary(reviewRef.summary);
             setRating(reviewRef.rating);
             setReview(reviewRef.review);
+            setLink(reviewRef.link ?? "");
             setSelected(tagConfigs?.filter((t) => reviewRef.tags.map((m) => m.id).includes(t.id)).map((t) => t.value) ?? []); 
         } else {
             setTitle("");
             setSummary("");
             setRating(0);
             setReview("");
+            setLink("");
             setSelected([]); 
         } 
     }, [isOpen]);
@@ -105,6 +108,15 @@ export default function ReviewDetails({ isOpen, onClose, tagConfigs, reviewRef }
                     </div>
                 </div>
 
+                {/* Link */}
+                <div className="flex flex-row items-center space-x-4 pt-4">
+                    <p>Link:</p>
+                    <TextField id='linkField' value={link} variant="outlined" size="small" className="w-full"
+                        onChange={(e) => setLink(e.target.value)}
+                        sx={{ '& .MuiInputBase-input': { color: 'white' }, '& .MuiOutlinedInput-notchedOutline': { borderColor: 'gray' } }}/>
+                </div>
+
+
                 {/* Review */}
                 <div className="flex flex-col pt-4">
                     <p>Review</p>
@@ -128,14 +140,14 @@ export default function ReviewDetails({ isOpen, onClose, tagConfigs, reviewRef }
                         onClick={() => {
                             if (reviewRef) {
                                 const updatingReview: Review = {
-                                    title, summary, rating, review, image_path: undefined, link: undefined,
+                                    title, summary, rating, review, image_path: undefined, link: link,
                                     tags: (tagConfigs ?? []).filter((t) => selected.includes(t.value)),
                                     id: reviewRef.id, created_at: new Date(),
                                 }
                                 updateReview(updatingReview);
                             } else {
                                 const newReview: Review = {
-                                    title, summary, rating, review, image_path: undefined, link: undefined,
+                                    title, summary, rating, review, image_path: undefined, link: link,
                                     tags: (tagConfigs ?? []).filter((t) => selected.includes(t.value)),
                                     id: 0,
                                     created_at: new Date()
